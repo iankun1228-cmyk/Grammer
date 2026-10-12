@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>语文知识乐园 - “的”的用法</title>
+    <link rel="stylesheet" href="./styles.css?v=phrase-stage3-buttons-1" />
+  </head>
+  <body>
+    <main id="game" class="game-stage" aria-label="语文知识乐园">
+      <header class="topbar">
+        <div class="brand-block">
+          <div class="brand-mark" aria-hidden="true">的</div>
+          <div>
+            <h1>周末整理房间</h1>
+            <p id="storyLine">房间有点乱，法法需要你一起找物品。</p>
+          </div>
+        </div>
+        <nav class="stage-tabs" aria-label="关卡阶段">
+          <button class="tab is-active" type="button" data-stage-tab="find">找物</button>
+          <button class="tab" type="button" data-stage-tab="restore">还原</button>
+          <button class="tab" type="button" data-stage-tab="book">宝典</button>
+          <button class="tab" type="button" data-stage-tab="transfer">迁移</button>
+        </nav>
+        <div class="top-actions">
+          <button id="soundToggle" class="icon-button" type="button" aria-pressed="true" title="语音反馈">
+            <span aria-hidden="true">♪</span>
+          </button>
+          <button id="restartBtn" class="icon-button" type="button" title="重新开始">
+            <span aria-hidden="true">↺</span>
+          </button>
+        </div>
+      </header>
+
+      <section id="view" class="view" aria-live="polite"></section>
+
+      <footer class="statusbar">
+        <div class="progress-shell" aria-label="总进度">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+        <p id="feedbackText" class="feedback-text">看任务卡，在同一张房间画布里找对应物品。</p>
+      </footer>
+    </main>
+
+    <script src="./game.js?v=sentence-stage4-question-shadow-1"></script>
+  </body>
+</html>
