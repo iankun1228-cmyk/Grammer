@@ -1,0 +1,93 @@
+/* Shared geometry for the two matching second-stage answer frames. */
+#game {
+  --answer-frame-width: 185px;
+  --answer-frame-height: 82px;
+  --answer-frame-face-height: 77px;
+  --answer-slot-width: 53px;
+  --answer-slot-height: 57px;
+  --answer-connector-width: 38px;
+  --answer-column-gap: 10px;
+}
+
+#game .word-stage-two-question,
+#game .word-stage-two-answer-frame,
+#game .word-stage-two-answer-slots,
+#game.phrase-restore-layout .phrase-stage2-answer-frame,
+#game.phrase-restore-layout .phrase-restore-slots {
+  width: var(--answer-frame-width);
+  height: var(--answer-frame-height);
+}
+
+/* Center the row within the 77px face; the lower 5px is the frame's depth. */
+#game .word-stage-two-answer-slots,
+#game.phrase-restore-layout .phrase-restore-slots {
+  display: grid;
+  grid-template-columns: var(--answer-slot-width) var(--answer-connector-width) var(--answer-slot-width);
+  grid-template-rows: var(--answer-frame-face-height);
+  column-gap: var(--answer-column-gap);
+  justify-content: center;
+  align-items: center;
+}
+#game .word-stage-two-question .combo-slot,
+#game.phrase-restore-layout .phrase-restore-slot {
+  position: relative;
+  left: auto;
+  top: auto;
+  width: var(--answer-slot-width);
+  height: var(--answer-slot-height);
+  margin: 0;
+  align-self: center;
+  justify-self: center;
+}
+#game .word-stage-two-question .combo-slot[data-slot="modifier"],
+#game.phrase-restore-layout .phrase-restore-slot-action { grid-area: 1 / 1; }
+#game .word-stage-two-question .combo-slot[data-slot="object"],
+#game.phrase-restore-layout .phrase-restore-slot-object { grid-area: 1 / 3; }
+#game.phrase-restore-layout .phrase-restore-slots.is-compact {
+  grid-template-columns: repeat(2, var(--answer-slot-width));
+  column-gap: 28px;
+  justify-content: center;
+}
+#game.phrase-restore-layout .phrase-restore-slots.is-compact .phrase-restore-slot-action,
+#game.phrase-restore-layout .phrase-restore-slots.is-compact .phrase-restore-slot-object { grid-area: auto; }
+#game .word-stage-two-de-bridge {
+  position: relative;
+  grid-area: 1 / 2;
+  left: auto;
+  top: auto;
+  width: var(--answer-connector-width);
+  height: var(--answer-slot-height);
+}
+#game.phrase-restore-layout .phrase-restore-countdown {
+  position: relative;
+  grid-area: 1 / 2;
+  left: auto;
+  top: auto;
+  width: var(--answer-connector-width);
+  height: var(--answer-connector-width);
+  margin: 0;
+  align-self: center;
+  justify-self: center;
+}
+#game.phrase-restore-layout .phrase-restore-countdown::before { inset: 4px; }
+
+/* These slots contain one icon; discard the older icon-and-label grid. */
+#game.phrase-restore-layout .phrase-restore-slot {
+  grid-template-rows: 1fr;
+  gap: 0;
+}
+#game.phrase-restore-layout .phrase-restore-slot > span,
+#game.phrase-restore-layout .phrase-restore-slot > .phrase-slot-hint {
+  display: none;
+}
+
+/* Match the square resource artwork without drawing a second frame over it. */
+#game .sentence-care-asset-answer-slots {
+  grid-template-columns: 52px 66px 52px;
+  gap: 4px;
+  justify-content: center;
+}
+#game .sentence-care-asset-answer-slot { width:52px; height:52px; }
+#game .sentence-care-asset-answer-slot.has-resource-art { border:0; background:transparent; }
+#game .sentence-care-answer-animal { width:48px; height:48px; }
+#game .sentence-care-answer-result { width:52px; height:52px; }

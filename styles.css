@@ -1,6 +1,7 @@
 :root {
   --stage-w: 1194px;
   --stage-h: 834px;
+  --resource-name-size: 13px;
   --ink: #273142;
   --muted: #657186;
   --line: #d7dde8;
@@ -69,7 +70,7 @@ button {
 
 .game-stage.home-layout {
   grid-template-rows: 1fr;
-  background: #ffffff;
+  background: #64d9e9;
 }
 
 .game-stage.home-layout .topbar,
@@ -79,7 +80,75 @@ button {
 
 .game-stage.home-layout .view {
   overflow: hidden;
-  background: #ffffff;
+  background: #64d9e9;
+}
+
+.game-stage.word-map-layout,
+.game-stage.phrase-map-layout,
+.game-stage.sentence-map-layout {
+  grid-template-rows: 1fr;
+  border: 0;
+  box-shadow: none;
+  background: #35c0e8;
+}
+
+.game-stage.word-map-layout .topbar,
+.game-stage.word-map-layout .statusbar,
+.game-stage.phrase-map-layout .topbar,
+.game-stage.phrase-map-layout .statusbar,
+.game-stage.sentence-map-layout .topbar,
+.game-stage.sentence-map-layout .statusbar { display: none; }
+.game-stage.word-map-layout .view,
+.game-stage.phrase-map-layout .view,
+.game-stage.sentence-map-layout .view {
+  width: 1194px;
+  height: 834px;
+  overflow: hidden;
+  background: #35c0e8;
+}
+
+.word-map-screen { position: absolute; inset: 0; overflow: hidden; }
+.word-map-background { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; }
+.word-map-back,
+.word-map-node,
+.word-map-next { position: absolute; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.word-map-back { left: 35px; top: 28px; width: 86px; height: 92px; z-index: 2; }
+.word-map-back img { width: 100%; height: 100%; display: block; }
+.word-map-guide {
+  position: absolute;
+  left: 311px;
+  top: 174px;
+  width: 127px;
+  height: 210px;
+  z-index: 3;
+  object-fit: contain;
+  pointer-events: none;
+  transform-origin: 50% 90%;
+  animation: word-map-guide-idle 2.4s ease-in-out infinite;
+}
+.word-map-node { left: 337px; top: 327px; width: 52px; height: 54px; z-index: 2; }
+.word-map-node img { display: block; width: 100%; height: 100%; }
+.word-map-node:hover,
+.word-map-node:focus-visible,
+.word-map-next:hover,
+.word-map-next:focus-visible { outline: none; filter: brightness(1.06); }
+.word-map-next { right: 16px; top: 379px; width: 54px; height: 78px; z-index: 2; display: grid; place-items: center; }
+.knowledge-map-screen .word-map-guide {
+  width: 123px;
+  height: 211px;
+}
+.knowledge-map-screen .word-map-back { z-index: 4; }
+.knowledge-map-screen .word-map-next { z-index: 4; }
+.phrase-map-screen .word-map-guide { left: 465px; top: 66px; }
+.phrase-map-screen .word-map-node { left: 500px; top: 227px; }
+.sentence-map-screen .word-map-guide { left: 321px; top: 104px; }
+.sentence-map-screen .word-map-node { left: 357px; top: 265px; }
+@keyframes word-map-guide-idle {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-7px) rotate(1deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .word-map-guide { animation: none; }
 }
 
 .home-canvas {
@@ -88,6 +157,116 @@ button {
   display: grid;
   place-items: center;
   padding: 48px 40px;
+}
+
+.home-category-screen {
+  padding: 0;
+  overflow: hidden;
+  background: #ffbd18;
+}
+
+.home-category-background {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+}
+
+.home-category-hotspots {
+  position: absolute;
+  inset: 0;
+}
+
+.home-category-hotspots::before {
+  content: "";
+  position: absolute;
+  inset: 18% 0 24%;
+  background: #ffbd18;
+}
+
+.home-category-hit {
+  position: absolute;
+  top: 22.7%;
+  width: 24.7%;
+  height: 49.8%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.home-category-hit:nth-child(1) { left: 8.7%; }
+.home-category-hit:nth-child(2) { left: 37.55%; }
+.home-category-hit:nth-child(3) { left: 66.75%; }
+
+.home-category-hit img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+}
+
+.home-category-hit:hover,
+.home-category-hit:focus-visible {
+  filter: brightness(1.03);
+}
+
+.home-category-hit:active {
+  filter: brightness(0.98);
+}
+
+.home-title-screen {
+  padding: 0;
+  background: #64d9e9;
+}
+
+.home-title-background {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.home-start-button {
+  position: absolute;
+  left: 50%;
+  bottom: 11.3%;
+  width: 171px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 5px 0 var(--ui-gold-base, #be9f55);
+  cursor: pointer;
+  transform: translateX(-50%);
+  transition: transform 120ms ease;
+}
+
+.home-start-button img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: inherit;
+}
+
+.home-start-button:hover { transform: translate(-50%, -1px); }
+.home-start-button:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 6px;
+}
+.home-start-button:active {
+  transform: translate(-50%, 3px);
+  box-shadow: 0 2px 0 var(--ui-gold-base, #be9f55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-start-button { transition: none; }
 }
 
 .home-top-instruction {
@@ -4317,7 +4496,6 @@ h1 {
   width: 1194px;
   height: 834px;
   border: 0;
-  border-radius: 0;
   box-shadow: none;
 }
 
@@ -4593,14 +4771,84 @@ h1 {
   height: 100%;
 }
 
-.word-stage-one-question {
+.stage-top-instruction-corrected,
+.stage-one-instruction-corrected {
   position: absolute;
-  left: 471px;
-  top: 693px;
+  top: 16px;
+  left: 195px;
+  width: 455px;
+  height: 59px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: #81500a;
+  font-size: 28px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.word-stage-one-question,
+.phrase-find-question-art,
+.sentence-reference-task-card {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--ui-scene-edge, 30px) + 5px);
   z-index: 12;
-  width: 247px;
-  height: 121px;
+  width: 100px;
+  height: 100px;
+  display: grid;
+  place-items: center;
+  transform: translateX(-50%);
   pointer-events: none;
+}
+
+.stage-one-audio-button {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 4px solid #ffdb55;
+  border-radius: 28px;
+  box-shadow: 0 5px 0 #b1842d;
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  background: #fff;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.stage-one-audio-button .stage-one-audio-character {
+  display: block;
+  width: 84px;
+  height: 84px;
+  object-fit: contain;
+  pointer-events: none;
+  transform-origin: 50% 75%;
+  animation: none;
+}
+
+.stage-one-audio-button.is-speaking .stage-one-audio-character {
+  animation: stageOneAudioSpeaking 620ms ease-in-out infinite;
+  filter: drop-shadow(0 0 3px rgba(242, 169, 34, .6));
+}
+
+@keyframes stageOneAudioSpeaking {
+  0%, 100% { transform: rotate(-2deg) scale(1); }
+  50% { transform: translateY(-2px) rotate(2deg) scale(1.07); }
+}
+
+.stage-one-audio-button:focus-visible {
+  outline: 3px solid #80500b;
+  outline-offset: 3px;
+  border-radius: 28px;
+}
+
+.word-stage-one-audio {
+  width: 100%;
+  height: 100%;
 }
 
 @keyframes word-stage-one-question-breathe {
@@ -4633,12 +4881,17 @@ h1 {
 @media (prefers-reduced-motion: reduce) {
   .home-top-instruction,
   .word-stage-one-question-content,
+  .stage-one-audio-button .stage-one-audio-character,
   .word-stage-four-question-art,
   .phrase-find-question-image,
   .phrase-stage2-breathe,
   .word-stage-three-next,
   .phrase-reference-next,
   .sentence-book-next-art {
+    animation: none;
+  }
+
+  .stage-one-audio-button.is-speaking .stage-one-audio-character {
     animation: none;
   }
 }
@@ -4715,28 +4968,54 @@ h1 {
   width: 1128px;
   height: 121px;
   pointer-events: none;
-  background: url("./assets/word-stage1/Group 351.png") center / 100% 100% no-repeat;
+  background: none;
+}
+
+/* Use only the two resource sections of the original artwork. Its middle
+   label/frame duplicates the independently rendered task card. */
+.word-stage-one-resource-dock::before,
+.word-stage-one-resource-dock::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  height: 121px;
+  background: url("./assets/word-stage1/Group 351.png") no-repeat;
+  background-size: 1128px 121px;
+  pointer-events: none;
+}
+
+.word-stage-one-resource-dock::before {
+  left: 0;
+  width: 420px;
+  background-position: left top;
+}
+
+.word-stage-one-resource-dock::after {
+  right: 0;
+  width: 416px;
+  background-position: right top;
 }
 
 .word-stage-one-resource-group {
   position: absolute;
+  z-index: 1;
   top: 36px;
   height: 64px;
   overflow: hidden;
 }
 
-.game-stage.word-find-layout .word-stage-one-resource-group {
-  top: calc(36px + 4%);
+.word-stage-one-resource-dock .word-stage-one-resource-group {
+  top: 41px;
 }
 
 .word-stage-one-modifiers {
-  left: 12px;
-  width: 406px;
+  left: 0;
+  width: 420px;
 }
 
 .word-stage-one-objects {
-  left: 724px;
-  width: 406px;
+  right: 0;
+  width: 416px;
 }
 
 .word-stage-one-resource-group > div {
@@ -4746,10 +5025,10 @@ h1 {
   grid-template-columns: repeat(7, 50px);
   align-items: center;
   align-content: center;
-  justify-content: start;
+  justify-content: center;
   justify-items: center;
   gap: 5px;
-  padding: 0 12px;
+  padding: 0;
 }
 
 .word-stage-one-resource {
@@ -4794,29 +5073,10 @@ h1 {
   cursor: pointer;
 }
 
-.word-stage-two-resource-dock::before {
-  content: "";
-  position: absolute;
-  z-index: 1;
-  left: 430px;
-  top: 0;
-  width: 250px;
-  height: 121px;
-  background: #fff3d7;
-  pointer-events: none;
-}
-
+/* Stage two keeps the same original frames and outer-side labels as stage
+   one. Only the contents become interactive; no second CSS frame is painted. */
 .word-stage-two-resource-dock .word-stage-one-resource-group {
   z-index: 2;
-}
-
-/* Stage two: align each resource row with its corresponding artwork compartment. */
-.word-stage-two-resource-dock .word-stage-one-modifiers {
-  top: calc(36px + 2%);
-}
-
-.word-stage-two-resource-dock .word-stage-one-objects {
-  top: calc(36px + 3%);
 }
 
 .word-stage-one-resource-dock .word-stage-one-resource-group h3,
@@ -4922,7 +5182,7 @@ h1 {
   left: 637px;
   top: 379px;
   z-index: 12;
-  width: 184px;
+  width: 185px;
   height: 82px;
   min-height: 0;
   padding: 0;
@@ -4937,7 +5197,7 @@ h1 {
   position: absolute;
   inset: 0;
   display: block;
-  width: 184px;
+  width: 185px;
   height: 82px;
   pointer-events: none;
 }
@@ -5715,6 +5975,88 @@ h1 {
   object-fit: fill;
 }
 
+.word-stage-three-guided {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  width: 1194px;
+  height: 834px;
+  overflow: hidden;
+}
+
+.word-stage-three-guided-background {
+  display: block;
+  width: 1194px;
+  height: 834px;
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
+}
+
+.word-stage-three-guide-choices {
+  position: absolute;
+  left: 425px;
+  top: 468px;
+  z-index: 2;
+  display: flex;
+  gap: 26px;
+}
+
+.word-stage-three-guide-choice {
+  width: 158px;
+  height: 52px;
+  border: 0;
+  border-radius: 28px;
+  background: url("./assets/word-stage3/guided/option-button.png") center / 100% 100% no-repeat;
+  color: transparent;
+  cursor: pointer;
+  font-size: 0;
+}
+
+.word-stage-three-guide-choice:focus-visible {
+  outline: 3px solid #2d9b84;
+  outline-offset: 3px;
+}
+
+.word-stage-three-guide-choice.is-selected {
+  background: rgba(255, 255, 255, .18);
+}
+
+.word-stage-three-guide-final-line {
+  position: absolute;
+  left: 313px;
+  top: 622px;
+  width: 558px;
+  min-height: 36px;
+  box-sizing: border-box;
+  padding: 8px 18px;
+  color: #8d5608;
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1.25;
+  text-align: left;
+}
+
+.word-stage-three-guide-next {
+  position: absolute;
+  left: 851px;
+  top: 647px;
+  z-index: 3;
+  width: 86px;
+  height: 86px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.word-stage-three-guide-next img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .word-stage-three-tools {
   position: absolute;
   inset: 28px 34px auto;
@@ -6101,7 +6443,7 @@ h1 {
 
 /* The supplied stage-two frame has its own dimensions and question-slot artwork. */
 .word-stage-two-question.restore-question-card {
-  width: 184px;
+  width: 185px;
   height: 82px;
   min-height: 0;
   padding: 0;
@@ -6148,7 +6490,7 @@ h1 {
   border: 3px solid #ffd13d;
   border-radius: 16px;
   background: #ffffff;
-  box-shadow: 0 5px 0 #e2af1c;
+  box-shadow: 0 5px 0 var(--ui-gold-base, #be9f55);
   color: #8a5a09;
 }
 
@@ -6244,7 +6586,7 @@ h1 {
   border: 3px solid #ffd13d;
   border-radius: 16px;
   background: #ffffff;
-  box-shadow: 0 5px 0 #e2af1c;
+  box-shadow: 0 5px 0 var(--ui-gold-base, #be9f55);
   color: #8a5a09;
 }
 
@@ -6596,7 +6938,6 @@ h1 {
 .game-stage.sentence-book-layout:has(.sentence-book-asset-stage) {
   grid-template-rows: 1fr;
   border: 0;
-  border-radius: 0;
   box-shadow: none;
 }
 
@@ -6663,6 +7004,110 @@ h1 {
   width: 100%;
   height: 100%;
   object-fit: fill;
+}
+
+.sentence-stage-three-guided {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  width: 1194px;
+  height: 834px;
+  overflow: hidden;
+}
+.sentence-stage-three-guided-background {
+  display: block;
+  width: 1194px;
+  height: 834px;
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
+}
+.sentence-stage-three-guide-choices {
+  position: absolute;
+  left: 434px;
+  top: 469px;
+  z-index: 2;
+  display: flex;
+  gap: 22px;
+}
+.sentence-stage-three-guide-choice {
+  width: 158px;
+  height: 52px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 28px;
+  background: url("./assets/sentence-stage3/guided/option-button.png") center / 100% 100% no-repeat;
+  color: #fff;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1.05;
+  text-shadow: 0 1px 0 rgba(185, 128, 12, .35);
+}
+.sentence-stage-three-guide-choice:focus-visible {
+  outline: 3px solid #2d9b84;
+  outline-offset: 3px;
+}
+.sentence-stage-three-guide-choice.is-selected {
+  filter: brightness(.94);
+}
+.sentence-stage-three-guided[data-guide-index="1"] .sentence-stage-three-guide-choices {
+  left: 433px;
+  gap: 8px;
+}
+.sentence-stage-three-guided[data-guide-index="1"] .sentence-stage-three-guide-choice {
+  width: 142px;
+  font-size: 15px;
+}
+.sentence-stage-three-guide-rules {
+  position: absolute;
+  left: 313px;
+  top: 535px;
+  z-index: 2;
+  width: 630px;
+  color: #8d5608;
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1.25;
+  text-align: left;
+}
+.sentence-stage-three-guide-rule {
+  height: 45px;
+  box-sizing: border-box;
+  padding: 8px 18px;
+  background: rgba(255, 240, 201, .96);
+}
+.sentence-stage-three-guide-final-line {
+  position: absolute;
+  left: 313px;
+  top: 622px;
+  width: 630px;
+  min-height: 36px;
+  box-sizing: border-box;
+  padding: 8px 18px;
+  color: #8d5608;
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1.25;
+  text-align: left;
+}
+.sentence-stage-three-guide-next {
+  position: absolute;
+  left: 851px;
+  top: 647px;
+  z-index: 3;
+  width: 86px;
+  height: 86px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.sentence-stage-three-guide-next img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .sentence-book-asset-stage .sentence-reference-tools,
@@ -6788,8 +7233,7 @@ h1 {
 }
 
 .sentence-stage4-canvas:not(.is-complete) .sentence-stage4-question {
-  transform-origin: center;
-  animation: word-stage-one-question-breathe 1.6s ease-in-out infinite;
+  animation: none;
 }
 
 .sentence-stage4-bread-display-breathe {
@@ -7509,8 +7953,8 @@ h1 {
 
 .stage-four-grammar-close {
   position: absolute;
-  left: calc(50% + 330px);
-  top: calc(50% - 260px);
+  left: calc(50% + 306px);
+  top: calc(50% - 232px);
   z-index: 3;
   width: 44px;
   height: 44px;
@@ -7542,7 +7986,7 @@ h1 {
 .stage-four-feedback {
   position: absolute;
   left: 50%;
-  top: 46px;
+  top: 128px;
   z-index: 35;
   width: 481px;
   height: 70px;
@@ -9117,7 +9561,6 @@ button.phrase-task-prop.is-settled {
   width: 1194px;
   height: 834px;
   border: 0;
-  border-radius: 0;
   box-shadow: none;
 }
 
@@ -9537,10 +9980,10 @@ button.phrase-task-prop.is-settled {
   z-index: 20;
   width: 1128px;
   height: 133px;
+  pointer-events: none;
 }
 
-/* Match the two phrase resource panels to the word-stage-one baseline and
-   height, while keeping the central “做一做” question artwork in place. */
+/* Keep only the left and right resource panels from the original artwork. */
 .phrase-find-bottom::before,
 .phrase-find-bottom::after {
   content: "";
@@ -9569,14 +10012,6 @@ button.phrase-task-prop.is-settled {
 .phrase-find-bottom.is-resources-hidden::before,
 .phrase-find-bottom.is-resources-hidden::after {
   display: none;
-}
-
-.phrase-find-bottom-frame {
-  inset: 0;
-  z-index: 0;
-  width: 1128px;
-  height: 133px;
-  clip-path: inset(0 500px);
 }
 
 .phrase-find-earned-list {
@@ -9618,23 +10053,9 @@ button.phrase-task-prop.is-settled {
   object-fit: contain;
 }
 
-.phrase-find-question-art {
-  position: absolute;
-  left: 503.9px;
-  top: 31px;
-  z-index: 2;
-  width: 122.2px;
-  height: 128.7px;
-  pointer-events: none;
-}
-
-.phrase-find-question-art .phrase-find-question-image {
-  position: static;
-  width: 122.2px;
-  height: 128.7px;
-  object-fit: fill;
-  transform-origin: center;
-  animation: word-stage-one-question-breathe 1.6s ease-in-out infinite;
+.phrase-stage-one-audio {
+  width: 100%;
+  height: 100%;
 }
 
 
@@ -9925,21 +10346,6 @@ button.phrase-task-prop.is-settled {
   position: absolute;
   inset: 0;
   overflow: hidden;
-}
-
-.phrase-restore-scene-caption {
-  position: absolute;
-  left: 14px;
-  right: 14px;
-  bottom: 8px;
-  z-index: 5;
-  color: #536d7d;
-  font-size: 14px;
-  text-align: center;
-}
-
-.phrase-restore-scene-caption:empty {
-  display: none;
 }
 
 .phrase-mini-old-text {
@@ -10922,6 +11328,101 @@ button.phrase-task-prop.is-settled {
   z-index: 2;
   background: rgba(43, 45, 26, .48);
 }
+
+.phrase-stage-three-guided {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  width: 1194px;
+  height: 834px;
+  overflow: hidden;
+}
+.phrase-stage-three-guided-background {
+  display: block;
+  width: 1194px;
+  height: 834px;
+  object-fit: fill;
+  pointer-events: none;
+  user-select: none;
+}
+.phrase-stage-three-guide-choices {
+  position: absolute;
+  left: 425px;
+  top: 468px;
+  z-index: 2;
+  display: flex;
+  gap: 26px;
+}
+.phrase-stage-three-guide-choice {
+  width: 158px;
+  height: 52px;
+  padding: 0;
+  border: 0;
+  border-radius: 28px;
+  background: url("./assets/phrase-stage3/guided/option-button.png") center / 100% 100% no-repeat;
+  color: #fff;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 900;
+  text-shadow: 0 1px 0 rgba(185, 128, 12, .35);
+}
+.phrase-stage-three-guide-choice:focus-visible {
+  outline: 3px solid #2d9b84;
+  outline-offset: 3px;
+}
+.phrase-stage-three-guide-choice.is-selected {
+  filter: brightness(.94);
+}
+.phrase-stage-three-guide-rules {
+  position: absolute;
+  left: 313px;
+  top: 535px;
+  z-index: 2;
+  width: 558px;
+  color: #8d5608;
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1.25;
+  text-align: left;
+}
+.phrase-stage-three-guide-rule {
+  height: 45px;
+  box-sizing: border-box;
+  padding: 8px 18px;
+  background: rgba(255, 240, 201, .96);
+}
+.phrase-stage-three-guide-final-line {
+  position: absolute;
+  left: 313px;
+  top: 622px;
+  width: 558px;
+  min-height: 36px;
+  box-sizing: border-box;
+  padding: 8px 18px;
+  color: #8d5608;
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1.25;
+  text-align: left;
+}
+.phrase-stage-three-guide-next {
+  position: absolute;
+  left: 851px;
+  top: 647px;
+  z-index: 3;
+  width: 86px;
+  height: 86px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.phrase-stage-three-guide-next img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 .phrase-reference-dock {
   z-index: 1;
   left: 35px;
@@ -11490,14 +11991,14 @@ button.phrase-task-prop.is-settled {
 }
 .phrase-stage4-resource.is-pear {
   box-sizing: border-box;
-  padding: 3px;
+  padding: 0;
   border: 1.5px solid #8b8b8b;
   border-radius: 10px;
   background: #fff;
 }
 .phrase-stage4-resource.is-pear img {
-  width: 46px;
-  height: 46px;
+  width: 52px;
+  height: 52px;
 }
 .phrase-stage4-resource:hover,
 .phrase-stage4-resource:focus-visible,
@@ -11550,6 +12051,11 @@ button.phrase-task-prop.is-settled {
   width: 100%;
   height: 100%;
 }
+.sentence-stage-instruction .stage-one-instruction-corrected {
+  left: 90px;
+  width: 680px;
+  font-size: 25px;
+}
 .sentence-reference-background {
   position: absolute;
   inset: 0;
@@ -11599,22 +12105,9 @@ button.phrase-task-prop.is-settled {
 .sentence-reference-back { left: 3%; top: 3%; width: 8%; height: 11%; }
 .sentence-reference-sound { right: 2%; top: 3%; width: 8%; height: 11%; }
 .sentence-reference-state-layer { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
-.sentence-reference-task-card { position: absolute; z-index: 4; pointer-events: none; }
 .sentence-reference-animal-state { position: absolute; object-fit: contain; }
 .sentence-reference-distractor { position: absolute; z-index: 4; object-fit: contain; pointer-events: none; user-select: none; }
-.sentence-reference-task-card { left: 50%; top: 80.39%; width: 10.24%; height: 15.43%; display: grid; place-items: center; box-sizing: border-box; transform: translateX(-50%); background: transparent; border: 0; border-radius: 0; box-shadow: none; }
-.sentence-reference-task-card > img:not(.sentence-care-task-label) {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  transform-origin: center;
-  animation: word-stage-one-question-breathe 1.6s ease-in-out infinite;
-}
-@media (prefers-reduced-motion: reduce) {
-  .sentence-reference-task-card > img:not(.sentence-care-task-label) {
-    animation: none;
-  }
-}
+.sentence-reference-task-card > .sentence-stage-one-audio { width: 100%; height: 100%; }
 .sentence-reference-result-hit img { width: 100%; height: 100%; object-fit: contain; }
 .sentence-reference-earned { position: absolute; z-index: 8; top: 87.5%; width: 4.7%; height: 8.2%; object-fit: contain; pointer-events: none; }
 .sentence-reference-keeper { position:absolute; z-index:5; pointer-events:none; }
@@ -11626,7 +12119,7 @@ button.phrase-task-prop.is-settled {
 .sentence-reference-tools { position:absolute; left:3%; right:3%; top:3%; z-index:12; display:flex; justify-content:space-between; pointer-events:none; }
 .sentence-reference-tools > div { display:flex; gap:28px; }
 .sentence-reference-tools button { width:86px; height:86px; padding:0; border:0; background:transparent; cursor:pointer; pointer-events:auto; }
-.sentence-reference-tools button:disabled { opacity:.75; cursor:default; }
+.sentence-reference-tools button:disabled { opacity:1; cursor:default; }
 .sentence-reference-stage .sentence-reference-tools button[data-sentence-tool="book"]:disabled { opacity:1; }
 .sentence-reference-tools img { width:100%; height:100%; object-fit:contain; }
 .sentence-reference-resource-frame { position:absolute; z-index:7; left:62.5%; right:3%; bottom:3%; height:14.1%; padding:0; box-sizing:border-box; }
@@ -11649,7 +12142,7 @@ button.phrase-task-prop.is-settled {
 .sentence-reference-result-hit { position:absolute; z-index:15; display:grid; place-items:center; padding:0; border:0; background:transparent; cursor:pointer; pointer-events:auto; }
 .sentence-reference-choice { width:56px; height:56px; }
 .sentence-reference-choice img { width:100%; height:100%; object-fit:contain; }
-.game-stage:has(.sentence-reference-stage) { border:0; border-radius:0; box-shadow:none; }
+.game-stage:has(.sentence-reference-stage) { border:0; box-shadow:none; }
 
 @keyframes sentenceReferenceKeeperWalk {
   from { transform: translate(var(--keeper-from-x), var(--keeper-from-y)); }
@@ -11697,7 +12190,7 @@ button.phrase-task-prop.is-settled {
   border: 3px solid #ffffff;
   border-radius: 20px;
   background: #fffdf5;
-  box-shadow: 0 5px 0 #d5a92d;
+  box-shadow: 0 5px 0 var(--ui-gold-base, #be9f55);
   color: #ffc532;
 }
 .game-stage.phrase-restore-layout .phrase-corner-tools .find-tool-icon {
@@ -11935,6 +12428,15 @@ button.phrase-task-prop.is-settled {
   display: block;
   object-fit: contain;
   pointer-events: none;
+}
+
+.game-stage.phrase-restore-layout .phrase-stage2-scene-art img {
+  animation: none !important;
+  transition: none !important;
+}
+
+.game-stage.phrase-restore-layout .phrase-restore-slot.is-hint {
+  opacity: 1;
 }
 
 .game-stage.phrase-restore-layout .phrase-restore-resource-dock {
@@ -12537,7 +13039,7 @@ button.phrase-task-prop.is-settled {
   border: 3px solid #f0c344;
   border-radius: 18px;
   background: #fff;
-  box-shadow: 0 6px 0 #d5a532;
+  box-shadow: 0 6px 0 var(--ui-gold-base, #be9f55);
   color: #8c5700;
   overflow: hidden;
 }
@@ -13038,7 +13540,6 @@ button.phrase-task-prop.is-settled {
 .game-stage.sentence-care-layout:has(.sentence-care-asset-stage) {
   grid-template-rows:1fr;
   border:0;
-  border-radius:0;
   box-shadow:none;
 }
 
@@ -13234,7 +13735,8 @@ button.phrase-task-prop.is-settled {
   height:72px;
   display:flex;
   align-items:flex-start;
-  gap:4px;
+  gap:0;
+  justify-content:center;
   pointer-events:none;
 }
 
@@ -13249,8 +13751,8 @@ button.phrase-task-prop.is-settled {
 }
 
 .sentence-care-asset-resource {
-  flex:0 0 52px;
-  width:52px;
+  flex:0 0 56px;
+  width:56px;
   height:72px;
   display:flex;
   flex-direction:column;
@@ -13277,11 +13779,11 @@ button.phrase-task-prop.is-settled {
 
 .sentence-care-asset-resource span {
   display:block;
-  width:52px;
+  width:56px;
   height:16px;
   overflow:hidden;
   color:#273142;
-  font-size:11px;
+  font-size:12px;
   font-weight:900;
   line-height:16px;
   text-align:center;
@@ -13608,6 +14110,74 @@ button.phrase-task-prop.is-settled {
   pointer-events: none;
 }
 
+.word-stage-four-answer-visual {
+  position: absolute;
+  z-index: 1;
+  left: 8.6%;
+  top: 35.7%;
+  width: 82.8%;
+  height: 60.9%;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 9%;
+  background: #fff;
+  pointer-events: none;
+}
+
+.word-stage-four-answer-visual img {
+  display: block;
+  width: var(--answer-visual-width, 86%);
+  height: var(--answer-visual-height, 86%);
+  object-fit: contain;
+}
+
+.word-stage-four-question-art-fafa-bottle .word-stage-four-answer-visual img {
+  --answer-visual-width: 60%;
+  --answer-visual-height: 94%;
+}
+
+.word-stage-four-question-art-blue-notebook .word-stage-four-answer-visual img {
+  --answer-visual-width: 83%;
+  --answer-visual-height: 86%;
+}
+
+.word-stage-four-question-art-wood-pencil-case-choice .word-stage-four-answer-visual,
+.word-stage-four-question-art-pretty-postcard-order .word-stage-four-answer-visual {
+  left: 2.5%;
+  top: 2.4%;
+  width: 95%;
+  height: 92%;
+}
+
+.word-stage-four-question-art-wood-pencil-case-choice .word-stage-four-answer-visual img {
+  --answer-visual-width: 90%;
+  --answer-visual-height: 57%;
+}
+
+.word-stage-four-question-art-handsome-badge-choice .word-stage-four-answer-visual,
+.word-stage-four-question-art-red-keychain-choice .word-stage-four-answer-visual {
+  left: 26.4%;
+  top: 35.7%;
+  width: 48.1%;
+  height: 60.9%;
+}
+
+.word-stage-four-question-art-handsome-badge-choice .word-stage-four-answer-visual img {
+  --answer-visual-width: 90%;
+  --answer-visual-height: 62%;
+}
+
+.word-stage-four-question-art-red-keychain-choice .word-stage-four-answer-visual img {
+  --answer-visual-width: 60%;
+  --answer-visual-height: 96%;
+}
+
+.word-stage-four-question-art-pretty-postcard-order .word-stage-four-answer-visual img {
+  --answer-visual-width: 91%;
+  --answer-visual-height: 90%;
+}
+
 .word-stage-four-de-bridge {
   position: absolute;
   left: 50%;
@@ -13639,6 +14209,7 @@ button.phrase-task-prop.is-settled {
   height: 52px;
   box-sizing: border-box;
   display: grid;
+  grid-template-rows: 1fr;
   place-items: center;
   padding: 0;
   border: 0;
@@ -13659,8 +14230,8 @@ button.phrase-task-prop.is-settled {
 
 .word-stage-four-combination-overlay .word-stage-four-drop-slot img {
   display: block;
-  width: 42px;
-  height: 42px;
+  width: 52px;
+  height: 52px;
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
@@ -13676,7 +14247,7 @@ button.phrase-task-prop.is-settled {
 
 .word-stage-four-resource-dock {
   position: absolute;
-  left: 386px;
+  left: 700px;
   top: 694px;
   width: 383px;
   height: 120px;
@@ -13804,18 +14375,32 @@ button.phrase-task-prop.is-settled {
 
 .word-stage-four-option-hotspot {
   width: 194px;
-  height: 91px;
-  padding: 0;
-  border: 0;
-  border-radius: 28px;
-  background: transparent;
+  height: 86px;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  padding: 0 10px;
+  border: 3px solid #ffd33f;
+  border-radius: 25px;
+  background: #fff;
+  box-shadow: 0 5px 0 var(--ui-gold-base, #be9f55);
+  color: #845000;
+  font-family: inherit;
+  font-size: 23px;
+  font-weight: 900;
+  line-height: 1.2;
+  text-align: center;
+  white-space: nowrap;
   cursor: pointer;
 }
 
-.word-stage-four-option-hotspot:hover,
+.word-stage-four-option-hotspot:hover {
+  background: #fffbed;
+}
+
 .word-stage-four-option-hotspot:focus-visible {
-  outline: none;
-  background: transparent;
+  outline: 3px solid #845000;
+  outline-offset: 3px;
 }
 
 .word-stage-four-option-hotspot.is-wrong {
@@ -14019,4 +14604,443 @@ button.phrase-task-prop.is-settled {
   100% {
     content: "";
   }
+}
+
+/* The second-stage reflection dialog uses the supplied card and button art. */
+.second-stage-reflection-overlay,
+.second-stage-result-overlay {
+  display: block;
+  background: rgba(63, 54, 26, 0.47);
+}
+
+.second-stage-reflection-card {
+  position: absolute;
+  left: 50%;
+  top: 289px;
+  width: 545px;
+  min-height: 236px;
+  padding: 101px 22px 20px;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  text-align: center;
+}
+
+.second-stage-reflection-prompt {
+  margin: 0;
+  color: #855100;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.3;
+}
+
+.second-stage-reflection-card.is-long .second-stage-reflection-prompt {
+  font-size: 18px;
+}
+
+.second-stage-reflection-card.is-very-long .second-stage-reflection-prompt {
+  font-size: 16px;
+}
+
+.second-stage-reflection-options {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 26px;
+  margin-top: 14px;
+}
+
+.second-stage-reflection-option {
+  width: max-content;
+  min-width: 157px;
+  max-width: 230px;
+  min-height: 49px;
+  padding: 6px 15px 9px;
+  border: 0;
+  background-color: transparent;
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  color: #fff;
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 1.2;
+  text-align: center;
+  cursor: pointer;
+}
+
+.second-stage-reflection-option:hover,
+.second-stage-reflection-option:focus-visible,
+.second-stage-reflection-option.is-selected {
+  outline: none;
+  filter: brightness(1.06);
+}
+
+.second-stage-reflection-option.is-wrong {
+  filter: saturate(0.75) sepia(0.2);
+  animation: shake 360ms ease;
+}
+
+.second-stage-result-card {
+  position: absolute;
+  left: 50%;
+  top: 373px;
+  width: 545px;
+  min-height: 124px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 22px;
+  padding: 20px 28px 24px;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+  border: 3px solid #ffd33f;
+  border-radius: 21px;
+  background: #fff;
+  box-shadow: 0 5px 0 var(--ui-gold-base, #be9f55);
+  color: #845000;
+}
+
+.second-stage-result-card strong {
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 30px;
+  white-space: nowrap;
+}
+
+.second-stage-result-term {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 10px;
+  min-width: 52px;
+}
+
+.second-stage-result-piece {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  display: grid;
+  place-items: center;
+}
+
+.second-stage-result-piece img,
+.second-stage-result-piece .word-stage-one-modifier-visual,
+.second-stage-result-piece .word-stage-one-object-visual,
+.second-stage-result-piece .word-stage-one-resource-image {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.second-stage-result-operator {
+  flex: 0 0 auto;
+  font-size: 27px;
+  font-weight: 900;
+  line-height: 30px;
+  white-space: nowrap;
+}
+
+.second-stage-result-operator.is-connector {
+  color: #ffd33f;
+}
+
+.second-stage-result-picture {
+  display: grid;
+  place-items: center;
+  align-self: center;
+  width: 104px;
+  height: 70px;
+  flex: 0 0 104px;
+}
+
+.second-stage-result-picture img {
+  width: 104px;
+  height: 70px;
+  object-fit: contain;
+}
+
+/* Keep the reference pencil scale; allow broad objects to fill the result area. */
+.second-stage-result-picture[data-result-object="pencil"] {
+  width: 40px;
+  flex-basis: 40px;
+}
+
+.second-stage-result-picture[data-result-object="pencil"] img {
+  width: 40px;
+  height: 62px;
+}
+
+/* The doll artwork includes extra transparent space above and below the figure. */
+.second-stage-result-picture[data-result-object="doll"] img {
+  height: 76px;
+}
+
+/* Action scenes need enough room to show both the child and the object. */
+.second-stage-result-phrase {
+  top: 358px;
+  min-height: 154px;
+  padding: 18px 28px;
+  align-items: center;
+}
+
+.second-stage-result-phrase .second-stage-result-operator {
+  transform: translateY(20px);
+}
+
+.second-stage-result-phrase .second-stage-result-picture {
+  width: 112px;
+  height: 112px;
+  flex-basis: 112px;
+}
+
+.second-stage-result-phrase .second-stage-result-picture img {
+  width: 112px;
+  height: 112px;
+  /* Clip to the 874px face, slightly inside its white rim to remove shadow antialiasing. */
+  clip-path: inset(1% 3.552% 6.104% round 12%);
+}
+
+.second-stage-result-sentence {
+  top: 358px;
+  width: 600px;
+  min-height: 154px;
+  padding: 18px 28px;
+  align-items: center;
+  gap: 18px;
+}
+
+.second-stage-result-sentence .second-stage-result-operator {
+  transform: translateY(20px);
+}
+
+.second-stage-result-sentence .second-stage-result-picture {
+  width: 112px;
+  height: 112px;
+  flex-basis: 112px;
+}
+
+.second-stage-result-sentence .second-stage-result-picture img {
+  width: 112px;
+  height: 112px;
+  border-radius: 14px;
+}
+
+.second-stage-result-sentence strong,
+.second-stage-result-sentence .second-stage-result-operator {
+  font-size: 22px;
+}
+
+
+/* Resource alignment: preserve the supplied frame art and all dock positions.
+   Keep labels below their icons, and center the complete card inside the frame. */
+.word-stage-four-resource-card,
+.phrase-stage4-resource,
+.sentence-stage4-resource {
+  display: grid;
+  grid-template-rows: 52px 16px;
+  align-items: center;
+  justify-items: center;
+  gap: 2px;
+  height: 70px;
+}
+
+.word-stage-four-resource-name,
+.phrase-stage4-resource-name,
+.sentence-stage4-resource-name {
+  position: static;
+  transform: none;
+  display: block;
+  max-width: 100%;
+  padding: 0;
+  background: transparent;
+  line-height: 16px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.word-stage-four-resource-group {
+  justify-content: center;
+}
+
+.phrase-stage4-resource-list {
+  top: 38px;
+  height: 70px;
+}
+
+/* These strips previously sat off-center or exceeded their original frames. */
+.phrase-find-earned-actions { left: 6px; }
+.phrase-find-earned-objects { left: auto; right: 6px; }
+
+.game-stage.phrase-restore-layout .phrase-restore-resource-group {
+  top: 39px;
+}
+
+.game-stage.phrase-restore-layout .phrase-resource-row {
+  align-items: center;
+}
+
+.sentence-reference-resource-items {
+  left: 10px;
+  right: 10px;
+  justify-content: flex-start;
+  gap: 2px;
+}
+
+.sentence-reference-earned-item {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 58px;
+}
+
+.sentence-care-asset-resource-list {
+  width: 392px;
+}
+
+.sentence-care-asset-animal-list { left: 10px; }
+.sentence-care-asset-result-list { left: 722px; }
+
+/* Long result names get their own two-line text area instead of crossing
+   into the next resource. Icon sizes and the surrounding frame stay fixed. */
+.sentence-stage4-resource {
+  grid-template-rows: 52px 26px;
+  height: 80px;
+}
+
+.sentence-stage4-resource-name {
+  width: 52px;
+  height: 26px;
+  line-height: 13px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+
+.sentence-stage4-combine-list {
+  top: 33px;
+  height: 80px;
+}
+
+.sentence-stage4-single-dock .sentence-stage4-single-list {
+  top: 6px;
+  height: 80px;
+  transform: none;
+}
+
+
+/* Resource names share one type size across all levels and stages. Target
+   the text only so icons, label chips, and frame geometry remain unchanged. */
+#game :is(
+  .word-stage-one-resource,
+  .word-stage-four-resource-card,
+  .phrase-find-earned-resource,
+  .phrase-resource-card,
+  .phrase-stage2-resource-card,
+  .phrase-transfer-drag-card,
+  .phrase-stage4-resource,
+  .sentence-reference-earned-item,
+  .sentence-earned-resource,
+  .sentence-care-resource,
+  .sentence-care-asset-resource,
+  .sentence-stage4-resource,
+  .sentence-resource-combine-card,
+  .resource-card,
+  .transfer-resource-card
+) > span:last-child {
+  font-family: inherit;
+  font-size: var(--resource-name-size);
+  font-weight: 900;
+}
+
+
+/* Resource artwork has one size across the nine active docks. Keep card,
+   label and frame geometry independent so longer names retain their space. */
+:root { --resource-icon-size: 50px; }
+
+#game :is(
+  .word-stage-one-resource,
+  .word-stage-four-resource-card,
+  .phrase-find-earned-resource,
+  .phrase-stage2-resource-card,
+  .phrase-stage4-resource,
+  .sentence-reference-earned-item,
+  .sentence-care-asset-resource,
+  .sentence-stage4-resource
+) img {
+  display: block;
+  width: var(--resource-icon-size);
+  height: var(--resource-icon-size);
+  min-width: var(--resource-icon-size);
+  max-width: none;
+  flex: 0 0 var(--resource-icon-size);
+  object-fit: contain;
+}
+
+#game .phrase-stage2-resource-card .phrase-resource-art-wrap {
+  width: var(--resource-icon-size);
+  height: var(--resource-icon-size);
+}
+
+/* The pear artwork has no frame baked in; frame just its icon, like peers. */
+#game .phrase-stage4-resource.is-pear {
+  border: 0;
+  background: transparent;
+}
+#game .phrase-stage4-resource.is-pear img {
+  box-sizing: border-box;
+  border: 1.5px solid #8b8b8b;
+  border-radius: 10px;
+  background: #fff;
+}
+
+/* Center icon + name in the white interior of each supplied frame.
+   Artwork also includes a title and lower shadow, so its full bounds are
+   not the content bounds. Keep the frame artwork and scene positions fixed. */
+.phrase-find-earned-list {
+  top: 82px;
+}
+
+.game-stage.phrase-restore-layout .phrase-restore-resource-group {
+  top: 36px;
+}
+
+.word-stage-four-resource-group {
+  top: 26.5px;
+}
+
+.phrase-stage4-resource-list {
+  top: 37px;
+}
+
+.sentence-reference-resource-items {
+  top: calc(61.8644% - 34px);
+  bottom: auto;
+  height: 68px;
+}
+
+.sentence-care-asset-resource-list {
+  height: 68px;
+}
+.sentence-care-asset-resource {
+  height: 68px;
+}
+.sentence-care-asset-animal-list {
+  top: calc(65.4822% - 34px);
+}
+.sentence-care-asset-result-list {
+  top: calc(63.9594% - 34px);
+}
+
+.sentence-stage4-single-dock .sentence-stage4-single-list {
+  top: 3px;
+}
+
+/* Keep every fourth-stage answer target still, including feedback states. */
+#game.sentence-transfer-layout :is(.sentence-stage4-single-answer, .sentence-stage4-combine-answer, .sentence-stage4-answer-slot, .sentence-stage4-option-answer, .sentence-stage4-order-answer),
+#game.sentence-transfer-layout :is(.sentence-stage4-single-answer, .sentence-stage4-combine-answer, .sentence-stage4-option-answer, .sentence-stage4-order-answer) * {
+  animation: none !important;
+  transition: none !important;
 }

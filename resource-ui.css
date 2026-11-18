@@ -1,0 +1,195 @@
+/* Resource UI authority. Values use the 1194 × 834 scene coordinate system. */
+:root {
+  --ui-scene-edge: 30px;
+  --resource-icon-size: 50px;
+  --resource-name-size: 13px;
+  --resource-name-line: 14px;
+  --resource-card-width: 52px;
+  --resource-card-gap: 4px;
+  --resource-art-name-gap: 2px;
+  --resource-panel-height: 84px;
+  --resource-panel-radius: 20px;
+  --resource-panel-border: 3px;
+  --resource-panel-gold: #ffd33f;
+  --ui-gold-base: #be9f55;
+  --resource-panel-shadow: var(--ui-gold-base);
+  --resource-name-color: #804d00;
+  --resource-title-color: #3b3426;
+}
+
+/* Frame artwork has inconsistent body heights. Keep central task artwork;
+   replace only resource frames with one shared, scalable frame. */
+#game .word-stage-one-resource-dock::before,
+#game .word-stage-one-resource-dock::after,
+#game .phrase-find-bottom::before,
+#game .phrase-find-bottom::after { display: none; }
+
+#game :is(
+  .word-stage-four-resource-dock-art,
+  .phrase-stage2-resource-frame,
+  .phrase-stage4-resource-dock-frame,
+  .phrase-stage4-single-result-frame,
+  .sentence-reference-resource-frame > img,
+  .sentence-care-asset-dock-frame,
+  .sentence-stage4-single-frame,
+  .sentence-stage4-combine-frame
+) { display: none; }
+
+#game .ui-resource-panel {
+  position: absolute;
+  right: auto;
+  bottom: auto;
+  z-index: 2;
+  height: var(--resource-panel-height);
+  min-height: var(--resource-panel-height);
+  max-width: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--resource-card-gap);
+  padding: 2px 11px;
+  box-sizing: border-box;
+  border: var(--resource-panel-border) solid var(--resource-panel-gold);
+  border-radius: var(--resource-panel-radius);
+  background: #fff;
+  box-shadow: 0 5px 0 var(--resource-panel-shadow);
+  overflow: visible;
+  transform: none;
+  pointer-events: auto;
+}
+
+#game .ui-resource-panel::before {
+  content: attr(data-resource-title);
+  position: absolute;
+  top: -33px;
+  left: 0;
+  width: max-content;
+  height: 25px;
+  display: grid;
+  place-items: center;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 0 3px 0 rgba(130, 93, 28, .45);
+  color: var(--resource-title-color);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 25px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+#game .ui-resource-panel[data-resource-layout$="right"]::before {
+  left: auto;
+  right: 0;
+}
+#game .ui-resource-panel > h3 { display: none; }
+
+#game .ui-resource-panel .ui-resource-list {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--resource-card-gap);
+  padding: 0;
+  margin: 0;
+  border: 0;
+  overflow: visible;
+}
+
+#game .ui-resource-panel .ui-resource-card {
+  position: relative;
+  flex: 0 0 var(--resource-card-width);
+  width: var(--resource-card-width);
+  min-width: var(--resource-card-width);
+  max-width: var(--resource-card-width);
+  height: auto;
+  display: grid;
+  grid-template-rows: var(--resource-icon-size) auto;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  justify-items: center;
+  gap: var(--resource-art-name-gap);
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--resource-name-color);
+  overflow: visible;
+  transform: none;
+}
+
+#game .ui-resource-panel .ui-resource-card .ui-resource-icon,
+#game .ui-resource-panel .ui-resource-card .phrase-resource-art-wrap {
+  position: static;
+  display: block;
+  flex: 0 0 var(--resource-icon-size);
+  width: var(--resource-icon-size);
+  height: var(--resource-icon-size);
+  min-width: var(--resource-icon-size);
+  max-width: none;
+  object-fit: contain;
+  transform: none;
+}
+
+#game .ui-resource-panel .ui-resource-card .ui-resource-name {
+  position: static;
+  display: block;
+  width: var(--resource-card-width);
+  min-width: 0;
+  max-width: var(--resource-card-width);
+  height: auto;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: var(--resource-name-color);
+  font-family: inherit;
+  font-size: var(--resource-name-size);
+  font-weight: 900;
+  line-height: var(--resource-name-line);
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+  text-overflow: clip;
+  overflow: visible;
+  transform: none;
+}
+
+#game .ui-resource-panel button.ui-resource-card:is(:focus-visible, .is-selected) {
+  outline: 2px solid #c99725;
+  outline-offset: 2px;
+  background: #fff8dc;
+}
+#game .ui-resource-panel button.ui-resource-card:active { cursor: grabbing; }
+
+@media (prefers-reduced-motion: reduce) {
+  #game .ui-resource-panel .ui-resource-card { animation: none; }
+}
+
+
+/* Names use their actual line height; the whole row is centered in the frame. */
+#game .ui-resource-panel .ui-resource-card .ui-resource-name[data-name-size="compact"] {
+  font-size: 12px;
+  line-height: 13px;
+}
+#game .ui-resource-panel .ui-resource-card .ui-resource-name[data-name-size="small"] {
+  font-size: 11px;
+  line-height: 12px;
+}
+
+
+/* Single-line rows use a tighter frame; wrapped rows retain safe text space. */
+#game .ui-resource-panel[data-resource-density="wrapped"] {
+  --resource-panel-height: 90px;
+}
+
+
+#game.sentence-transfer-layout .ui-resource-panel::before { display:none; }

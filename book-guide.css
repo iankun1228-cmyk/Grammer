@@ -1,0 +1,248 @@
+/* Original high-resolution artwork, with live text and interactive controls. */
+#game .book-guide { position:absolute; inset:0; z-index:12; pointer-events:none; color:#804d00; }
+.book-guide-parchment { position:absolute; left:20px; top:82px; width:1155px; height:771px; object-fit:fill; }
+#game .book-guide-title { position:absolute; left:320px; top:266px; width:550px; margin:0; text-align:center; color:#b77922; font-size:30px; line-height:42px; font-weight:900; }
+.book-guide-board { position:absolute; left:320px; top:326px; width:550px; height:195px; }
+.book-guide-panel { position:absolute; inset:0; width:100%; height:100%; object-fit:fill; }
+.book-guide-board-content { position:absolute; left:139px; top:18px; width:395px; height:150px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; color:#fff; }
+.book-guide-prompt { margin:0; font-size:17px; line-height:1.45; font-weight:800; text-align:left; width:100%; }
+.book-guide-examples { width:330px; height:85px; object-fit:contain; }
+.book-guide-scene { width:140px; height:105px; object-fit:contain; }
+.book-guide[data-guide-index="2"] .book-guide-board-content { display:grid; grid-template-columns:1fr 140px; gap:14px; }
+.book-guide[data-guide-index="2"] .book-guide-prompt { font-size:16px; }
+.book-guide[data-guide-index="1"] .book-guide-board-content { align-items:flex-start; justify-content:flex-start; gap:14px; }
+.book-guide-form { display:flex; align-items:center; justify-content:center; gap:8px; height:64px; }
+.book-guide-drop { width:78px; height:62px; border:1px solid #e8f6ed; border-radius:10px; display:grid; place-items:center; text-align:center; font-size:14px; line-height:1.3; font-weight:800; pointer-events:auto; }
+.book-guide-drop.is-filled { background:rgba(255,255,255,.13); }
+.book-guide-connector { width:40px; height:44px; display:grid; place-items:center; border:2px solid #fff; border-radius:9px; background:#ffd33f; color:#fff; font-size:25px; font-weight:900; }
+.book-guide-form.is-sentence { gap:6px; }
+.book-guide-form.is-sentence .book-guide-drop { width:63px; font-size:12px; }
+.book-guide-form.is-sentence .book-guide-connector { width:34px; }
+.book-guide-form-art { position:absolute; right:0; bottom:0; width:80px; height:95px; object-fit:contain; }
+.book-guide[data-book-category="sentence"] .book-guide-form-art { width:70px; }
+.book-guide-choices { position:absolute; left:425px; top:468px; width:342px; display:flex; justify-content:flex-start; gap:26px; pointer-events:auto; }
+#game .book-guide-choice { position:relative; width:158px; height:52px; padding:7px 13px 12px; border:0; background:url('./assets/word-stage3/guided/option-button.png') center / 100% 100% no-repeat; color:#fff; font-size:18px; line-height:1.2; font-weight:900; cursor:pointer; }
+#game .book-guide-choice.is-selected { color:#804d00; filter:brightness(.96); }
+#game .book-guide-choice:focus-visible { outline:3px solid #804d00; outline-offset:3px; border-radius:26px; }
+.book-guide[data-book-category="sentence"] .book-guide-choices { left:434px; top:469px; width:338px; gap:22px; }
+#game .book-guide[data-book-category="sentence"] .book-guide-choice { width:158px; font-size:15px; }
+#game .book-guide[data-book-category="sentence"][data-guide-index="1"] .book-guide-choice { width:140px; }
+.book-guide-rules { position:absolute; left:313px; top:531px; width:558px; margin:0; padding:0; list-style:none; display:grid; gap:9px; }
+.book-guide-rule { min-height:35px; display:flex; align-items:center; gap:10px; font-size:16px; line-height:1.4; font-weight:800; }
+.book-guide-rule > img { display:block; width:100%; height:35px; object-fit:fill; }
+.book-guide-rule-number { flex:0 0 26px; height:26px; display:grid; place-items:center; border-radius:50%; background:#804d00; color:#fff4d0; font-size:18px; }
+.book-guide-summary-art { position:absolute; left:20px; top:82px; width:1155px; height:771px; object-fit:contain; }
+#game .book-guide-next { position:absolute; left:851px; top:647px; width:86px; height:86px; padding:0; border:0; background:transparent; pointer-events:auto; cursor:pointer; }
+.book-guide-next img { width:100%; height:100%; object-fit:contain; }
+.book-guide-next:focus-visible { outline:3px solid #804d00; outline-offset:3px; border-radius:50%; }
+
+/* Match the original question layouts, including their category-specific offsets. */
+.book-guide-rule.is-revealed { padding-left:8px; }
+.book-guide-rule.is-uncovering,
+.book-guide.is-use-reveal .book-guide-rule:last-child { position:relative; }
+.book-guide-rule.is-uncovering::after,
+.book-guide.is-use-reveal .book-guide-rule:last-child::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url('./assets/word-stage3/guided/answer-bar.png') center / 100% 100% no-repeat;
+  pointer-events:none;
+  animation:book-guide-uncover-use 600ms ease-in-out forwards;
+}
+@keyframes book-guide-uncover-use {
+  from { clip-path:inset(0); }
+  to { clip-path:inset(0 0 0 100%); }
+}
+#game .book-guide-choice:disabled { cursor:default; }
+@media (prefers-reduced-motion:reduce) {
+  .book-guide-rule.is-uncovering::after,
+  .book-guide.is-use-reveal .book-guide-rule:last-child::after { display:none; }
+}
+.book-guide[data-book-category="sentence"] .book-guide-title { top:266px; }
+.book-guide[data-book-category="sentence"] .book-guide-board { left:329px; top:326px; }
+.book-guide[data-book-category="sentence"] .book-guide-rules { left:313px; top:531px; width:630px; font-size:15px; }
+.book-guide[data-book-category="sentence"][data-guide-index="1"] .book-guide-choices { left:433px; top:468px; width:442px; gap:8px; }
+.book-guide[data-guide-index="1"] .book-guide-prompt { position:absolute; left:29px; top:10px; width:240px; font-size:16px; text-align:center; }
+.book-guide[data-guide-index="1"] .book-guide-form { position:absolute; left:8px; top:50px; gap:8px; }
+.book-guide[data-book-category="phrase"][data-guide-index="1"] .book-guide-form { left:29px; }
+.book-guide[data-book-category="sentence"][data-guide-index="1"] .book-guide-form { left:-5px; gap:6px; }
+.book-guide[data-book-category="sentence"][data-guide-index="1"] .book-guide-form .book-guide-drop { width:78px; font-size:13px; }
+.book-guide[data-book-category="sentence"][data-guide-index="1"] .book-guide-form .book-guide-connector { width:40px; }
+.book-guide[data-guide-index="1"] .book-guide-form-art { left:290px; top:0; right:auto; bottom:auto; width:102px; height:135px; }
+.book-guide[data-book-category="phrase"][data-guide-index="1"] .book-guide-form-art { left:283px; top:17px; width:98px; height:98px; }
+.book-guide[data-book-category="sentence"][data-guide-index="1"] .book-guide-form-art { left:320px; top:40px; width:76px; height:76px; }
+.book-guide[data-guide-index="2"] .book-guide-board-content { display:block; }
+.book-guide[data-guide-index="2"] .book-guide-prompt { position:absolute; left:15px; top:32px; width:210px; font-size:16px; line-height:20px; }
+.book-guide[data-guide-index="2"] .book-guide-scene { position:absolute; left:244px; top:11px; width:142px; height:107px; }
+
+.word-stage-three-guided, .phrase-stage-three-guided, .sentence-stage-three-guided { z-index: 12; }
+.book-guide { z-index: 12 !important; }
+.book-guide-parchment { pointer-events:none; }
+
+.book-guide-question-art { display:none; }
+.book-guide-parchment { z-index:1; }
+.book-guide-title, .book-guide-board, .book-guide-choices, .book-guide-rules { z-index:2; }
+/* Reference guided-sheet layout: 1194 × 834 scene coordinates. */
+.book-guide-parchment { left:138px; top:125px; width:918px; height:657px; }
+#game .book-guide-title { left:320px; top:242px; width:550px; }
+.book-guide-board { left:320px; top:298px; width:550px; height:165px; }
+.book-guide-board-content { left:139px; top:8px; width:395px; height:145px; }
+.book-guide-examples { width:330px; height:78px; }
+.book-guide[data-guide-index="2"] .book-guide-prompt { top:20px; }
+
+/* Word guide: measured against the three 1194 × 834 design sheets.
+   Art dimensions include transparent padding and the character below the
+   green panel. Scale each original uniformly; never squeeze it into the face. */
+#game .book-guide[data-book-category="word"]:not(.is-complete) .book-guide-parchment {
+  left:131px; top:123px; width:922px; height:auto; object-fit:contain;
+}
+#game .book-guide[data-book-category="word"] .book-guide-title {
+  left:337px; top:240px; width:550px; font-size:30px; line-height:42px;
+}
+.book-guide[data-book-category="word"] .book-guide-board {
+  left:321px; top:296px; width:calc(1657px / 3); height:196px;
+}
+.book-guide[data-book-category="word"] .book-guide-panel {
+  width:100%; height:auto; object-fit:contain;
+}
+.book-guide[data-book-category="word"] .book-guide-board-content {
+  inset:0; width:100%; height:100%; display:block;
+}
+.book-guide[data-book-category="word"] .book-guide-prompt {
+  position:absolute; margin:0; font-size:16px; line-height:20px; font-weight:700;
+}
+.book-guide[data-book-category="word"][data-guide-index="0"] .book-guide-prompt {
+  left:144px; top:35px; width:400px; white-space:nowrap;
+}
+.book-guide[data-book-category="word"] .book-guide-examples {
+  position:absolute; left:189px; top:63px; width:calc(917px / 3); height:auto;
+}
+.book-guide[data-book-category="word"][data-guide-index="1"] .book-guide-prompt {
+  left:178px; top:31px; width:200px; text-align:left; white-space:nowrap;
+}
+.book-guide[data-book-category="word"][data-guide-index="1"] .book-guide-form {
+  left:166px; top:67px; height:62px; gap:12px;
+}
+.book-guide[data-book-category="word"] .book-guide-drop {
+  flex:0 0 77px; width:77px; height:62px; border-radius:10px;
+}
+.book-guide[data-book-category="word"] .book-guide-connector {
+  flex:0 0 41px; width:41px; height:43px; font-size:22px; border-width:1px;
+}
+.book-guide[data-book-category="word"][data-guide-index="1"] .book-guide-form-art {
+  left:423px; top:15px; width:calc(307px / 3); height:auto;
+}
+.book-guide[data-book-category="word"][data-guide-index="2"] .book-guide-prompt {
+  left:146px; top:52px; width:210px; font-size:16px; line-height:20px;
+}
+.book-guide .book-guide-prompt mark {
+  padding:0; color:#ffd33f; background:transparent;
+}
+.book-guide[data-book-category="word"][data-guide-index="2"] .book-guide-scene {
+  left:375px; top:29px; width:142px; height:auto;
+}
+.book-guide[data-book-category="word"] .book-guide-choices {
+  left:426px; top:470px; width:calc(1022px / 3); gap:calc(82px / 3);
+}
+#game .book-guide[data-book-category="word"] .book-guide-choice {
+  flex:0 0 calc(470px / 3); width:calc(470px / 3); height:calc(146px / 3);
+  padding:0 0 4px; display:grid; place-items:center;
+  background-size:contain; white-space:nowrap; font-size:18px; line-height:22px;
+}
+.book-guide[data-book-category="word"] .book-guide-rules {
+  left:311px; top:533px; width:561px; grid-template-rows:repeat(3, 40px); gap:4px;
+}
+.book-guide[data-book-category="word"] .book-guide-rule {
+  height:40px; min-height:0; gap:15px; font-size:18px; line-height:24px;
+}
+.book-guide[data-book-category="word"] .book-guide-rule.is-revealed { padding-left:10px; }
+.book-guide[data-book-category="word"] .book-guide-rule > img {
+  width:561px; height:auto; object-fit:contain;
+}
+.word-guide-background-resources { position:absolute; inset:0; pointer-events:none; }
+.word-guide-reference-room {
+  position:absolute; left:45px; top:148px; width:499px; height:auto; z-index:3;
+}
+.word-guide-background-resources > div {
+  position:absolute; left:32px; top:724px; width:419px; height:85px;
+  border:3px solid #ffd33f; border-radius:22px; background:#fff;
+  box-shadow:0 5px 0 var(--ui-gold-base);
+}
+.word-guide-background-resources > div + div { left:746px; width:413px; }
+.word-guide-background-resources > div::before {
+  content:attr(data-title); position:absolute; left:0; top:-33px;
+  padding:3px 10px; border-radius:15px; background:#fff;
+  box-shadow:0 3px 0 var(--ui-gold-base); color:#222; font-size:14px; font-weight:800;
+}
+.word-guide-background-resources > div + div::before { left:auto; right:0; }
+
+/* Phrase and passive guides use their own room art and the same measured
+   1194 x 834 coordinate system as the supplied design sheets. */
+.other-guide-background-resources { z-index:1; }
+.phrase-reference-stage .book-guide-parchment,
+.sentence-book-asset-stage .book-guide-parchment { left:131px; top:123px; width:922px; height:auto; object-fit:contain; }
+.phrase-reference-stage .book-guide-title,
+.sentence-book-asset-stage .book-guide-title { left:337px; top:240px; width:550px; font-size:30px; line-height:42px; }
+.phrase-reference-stage .book-guide-board,
+.sentence-book-asset-stage .book-guide-board { left:321px; top:296px; width:calc(1657px / 3); height:196px; }
+.phrase-reference-stage .book-guide-panel,
+.sentence-book-asset-stage .book-guide-panel { width:100%; height:auto; object-fit:contain; }
+.phrase-reference-stage .book-guide-board-content,
+.sentence-book-asset-stage .book-guide-board-content { inset:0; width:100%; height:100%; display:block; }
+.phrase-reference-stage .book-guide-prompt,
+.sentence-book-asset-stage .book-guide-prompt { position:absolute; margin:0; font-size:16px; line-height:20px; font-weight:700; }
+.phrase-reference-stage .book-guide-choices,
+.sentence-book-asset-stage .book-guide-choices { left:426px; top:470px; width:calc(1022px / 3); gap:calc(82px / 3); }
+.phrase-reference-stage .book-guide-choice,
+.sentence-book-asset-stage .book-guide-choice { flex:0 0 calc(470px / 3); width:calc(470px / 3); height:calc(146px / 3); padding:0 4px 4px; display:grid; place-items:center; background-size:contain; white-space:nowrap; font-size:16px; line-height:18px; }
+.phrase-reference-stage .book-guide-rules,
+.sentence-book-asset-stage .book-guide-rules { left:311px; top:533px; width:561px; grid-template-rows:repeat(3,40px); gap:4px; }
+.phrase-reference-stage .book-guide-rule,
+.sentence-book-asset-stage .book-guide-rule { height:40px; min-height:0; gap:15px; font-size:16px; line-height:22px; }
+.phrase-reference-stage .book-guide-rule > img,
+.sentence-book-asset-stage .book-guide-rule > img { width:561px; height:auto; object-fit:contain; }
+.phrase-reference-stage .book-guide[data-guide-index="0"] .book-guide-prompt { left:144px; top:31px; width:320px; }
+.phrase-reference-stage .book-guide[data-guide-index="0"] .book-guide-examples { position:absolute; left:194px; top:73px; width:284px; height:auto; }
+.phrase-reference-stage .book-guide[data-guide-index="1"] .book-guide-prompt { left:132px; top:31px; width:270px; text-align:center; }
+.phrase-reference-stage .book-guide[data-guide-index="1"] .book-guide-form { position:absolute; left:196px; top:67px; gap:8px; }
+.phrase-reference-stage .book-guide[data-guide-index="1"] .book-guide-drop { flex:0 0 48px; width:48px; height:44px; }
+.phrase-reference-stage .book-guide[data-guide-index="1"] .book-guide-connector { flex:0 0 30px; width:30px; height:30px; font-size:19px; }
+.phrase-reference-stage .book-guide[data-guide-index="1"] .book-guide-form-art { left:412px; top:16px; width:105px; height:101px; }
+.phrase-reference-stage .book-guide[data-guide-index="2"] .book-guide-prompt { left:150px; top:42px; width:190px; }
+.phrase-reference-stage .book-guide[data-guide-index="2"] .book-guide-scene { position:absolute; left:372px; top:37px; width:142px; height:auto; }
+.sentence-book-asset-stage .book-guide-board { left:329px; }
+.sentence-book-asset-stage .book-guide-rules { width:630px; }
+.sentence-book-asset-stage .book-guide[data-guide-index="0"] .book-guide-prompt { left:144px; top:31px; width:345px; }
+.sentence-book-asset-stage .book-guide[data-guide-index="0"] .book-guide-examples { position:absolute; left:236px; top:65px; width:176px; height:auto; }
+.sentence-book-asset-stage .book-guide[data-guide-index="0"] .book-guide-choices { left:432px; top:470px; width:400px; gap:12px; }
+.sentence-book-asset-stage .book-guide[data-guide-index="0"] .book-guide-choice { flex-basis:190px; width:190px; font-size:13px; }
+.sentence-book-asset-stage .book-guide[data-guide-index="1"] .book-guide-prompt { left:89px; top:10px; width:285px; text-align:center; }
+.sentence-book-asset-stage .book-guide[data-guide-index="1"] .book-guide-form { position:absolute; left:127px; top:67px; gap:5px; }
+.sentence-book-asset-stage .book-guide[data-guide-index="1"] .book-guide-drop { flex:0 0 40px; width:40px; height:44px; font-size:12px; }
+.sentence-book-asset-stage .book-guide[data-guide-index="1"] .book-guide-connector { flex:0 0 27px; width:27px; height:30px; font-size:18px; }
+.sentence-book-asset-stage .book-guide[data-guide-index="1"] .book-guide-form-art { left:448px; top:46px; width:141px; height:49px; }
+.sentence-book-asset-stage .book-guide[data-guide-index="1"] .book-guide-choices { left:433px; top:470px; width:442px; gap:8px; }
+.sentence-book-asset-stage .book-guide[data-guide-index="1"] .book-guide-choice { flex-basis:140px; width:140px; }
+.sentence-book-asset-stage .book-guide[data-guide-index="2"] .book-guide-prompt { left:146px; top:31px; width:300px; }
+.sentence-book-asset-stage .book-guide[data-guide-index="2"] .book-guide-scene { position:absolute; left:405px; top:38px; width:98px; height:98px; }
+.phrase-reference-stage .book-guide-next,
+.sentence-book-asset-stage .book-guide-next { left:851px; top:647px; }
+
+/* Passive-sentence guides follow the first level's board and option baseline. */
+#game .book-guide[data-book-category="sentence"] .book-guide-title { left:337px; top:240px; width:550px; }
+#game .book-guide[data-book-category="sentence"] .book-guide-board { left:321px; top:296px; }
+#game .book-guide[data-book-category="sentence"] .book-guide-rules { left:311px; top:533px; width:561px; }
+#game .book-guide[data-book-category="sentence"] .book-guide-prompt mark { color:#ffd33f; background:transparent; padding:0; }
+#game .book-guide[data-book-category="sentence"] .book-guide-choices { left:411px; top:470px; width:442px; gap:22px; }
+#game .book-guide[data-book-category="sentence"] .book-guide-choice { flex:0 0 210px; width:210px; font-size:15px; }
+#game .book-guide[data-book-category="sentence"][data-guide-index="0"] .book-guide-prompt { left:144px; top:28px; width:390px; }
+#game .book-guide[data-book-category="sentence"][data-guide-index="0"] .book-guide-examples { left:185px; top:77px; width:300px; height:65px; object-fit:contain; }
+#game .book-guide[data-book-category="sentence"][data-guide-index="1"] .book-guide-prompt { left:144px; top:31px; width:280px; text-align:center; }
+#game .book-guide[data-book-category="sentence"][data-guide-index="1"] .book-guide-form { left:144px; top:70px; height:62px; gap:8px; }
+#game .book-guide[data-book-category="sentence"][data-guide-index="1"] .book-guide-drop { flex:0 0 72px; width:72px; height:56px; font-size:12px; }
+#game .book-guide[data-book-category="sentence"][data-guide-index="1"] .book-guide-connector { flex:0 0 34px; width:34px; height:40px; font-size:22px; }
+#game .book-guide[data-book-category="sentence"][data-guide-index="1"] .book-guide-form-art { left:440px; top:42px; width:85px; height:85px; object-fit:contain; }
+#game .book-guide[data-book-category="sentence"][data-guide-index="1"] .book-guide-choices { gap:11px; }
+#game .book-guide[data-book-category="sentence"][data-guide-index="1"] .book-guide-choice { flex:0 0 140px; width:140px; }
+#game .book-guide[data-book-category="sentence"][data-guide-index="2"] .book-guide-prompt { left:144px; top:42px; width:260px; }
+#game .book-guide[data-book-category="sentence"][data-guide-index="2"] .book-guide-scene { left:414px; top:38px; width:100px; height:100px; }

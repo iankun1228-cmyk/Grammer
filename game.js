@@ -1,15 +1,29 @@
 const stageOrder = ["find", "restore", "book", "transfer"];
+const STAGE_THREE_GRAMMAR_NAMES = {
+  word: '“的”字短语',
+  phrase: "动宾短语",
+  sentence: "被字句"
+};
 const STAGE_THREE_NARRATIONS = {
-  word: "在词类知识中，“的”的语法意义是表示某样东西是谁的，或者它长什么样；其语法规则可以概括为：先说谁或什么样，再说“的”，最后说东西或人；而在使用时，它通常用来特别说明某样东西是谁的，或者它有什么特别之处。",
-  phrase: "在短语知识中，动宾短语的语法意义是表示动作做了什么、与什么事物有关；其语法规则可概括为“动作 + 对象”；在语法使用上，它可以把一件事怎么做、涉及什么事物说清楚。",
-  sentence: "在句子知识中，“被”字句的语法意义是：人或物是动作的承受者，强调承受者受到的影响或结果；其语法规则可概括为“承受者 + 被 + 施加者（可省略）+ 动作结果”；在语法使用上，它通常用来特别说明人或物受到的影响或结果。"
+  word: [
+    "意义：“的”可以说明东西是谁的，也可以说明东西是什么样的。",
+    "规则：先说谁或什么样，再用“的”连接后面的东西或人。",
+    "使用：需要特别说明归属或样子时，可以用“的”，比如“妈妈的水杯”。"
+  ],
+  phrase: [
+    "意义：动宾短语说明做什么动作，以及动作针对什么对象。",
+    "规则：动作在前，对象在后。",
+    "使用：需要说清楚动作针对什么时，可以补上对象，比如“擦黑板”。"
+  ],
+  sentence: [
+    "意义：被字句强调人或物受到的影响或结果。",
+    "规则：承受者 + 被 + 施加者（可省略）+ 动作结果。",
+    "使用：需要说明人或物受到了什么影响时，可以用被字句，比如“小兔子被法法包扎好了”。"
+  ]
 };
 const STAGE_ENTRY_NARRATIONS = {
-  "word:find": "请根据任务描述找到对应的物品",
   "word:restore": "观察左侧物品，点击资源将右侧对应物品归位",
-  "phrase:phrase-find": "完成“做一做”中的小任务",
   "phrase:phrase-restore": "点击资源，为小朋友们分配任务吧！",
-  "sentence:sentence-find": "先找到并点击任务中的动物，再让动物们达到相应的状态",
   "sentence:sentence-care": "找到并点击任务中的动物，利用资源，让动物们达到相应的状态"
 };
 const STAGE_FOUR_FEEDBACK_ASSET = encodeURI("./assets/word-stage4/Group 460.png");
@@ -19,11 +33,42 @@ const STAGE_INSTRUCTION_ASSETS = {
   three: encodeURI("./assets/instructions/Group 476.png"),
   four: encodeURI("./assets/instructions/Group 477.png")
 };
+const STAGE_ONE_AUDIO_BUTTON_ASSET = encodeURI("./assets/instructions/stage-one-audio-boy.png");
 const PHRASE_STAGE_INSTRUCTION_ASSETS = {
   one: encodeURI("./assets/instructions/phrase-stage-one-instruction.png"),
   two: encodeURI("./assets/instructions/phrase-stage-two-instruction.png")
 };
 const HOME_INSTRUCTION_ASSET = encodeURI("./assets/home-instruction.png");
+const HOME_START_BUTTON_ASSET = encodeURI("./assets/home-start-button.png");
+const HOME_BACKGROUND_ASSET = encodeURI("./assets/home-background.png");
+const HOME_CATEGORIES_BACKGROUND = encodeURI("./assets/home-categories-background.png");
+const HOME_CATEGORY_CARD_ASSETS = {
+  word: encodeURI("./assets/home-category-word.png"),
+  phrase: encodeURI("./assets/home-category-phrase.png"),
+  sentence: encodeURI("./assets/home-category-sentence.png")
+};
+const WORD_MAP_ASSETS = {
+  background: encodeURI("./assets/word-map-background.png"),
+  back: encodeURI("./assets/word-map-back.png"),
+  guide: encodeURI("./assets/word-map-guide.png"),
+  activeNode: encodeURI("./assets/word-map-active-node.png")
+};
+const KNOWLEDGE_MAP_ASSETS = {
+  back: encodeURI("./assets/knowledge-maps/back.png"),
+  activeNode: encodeURI("./assets/knowledge-maps/active-node.png"),
+  phrase: {
+    background: encodeURI("./assets/knowledge-maps/phrase-background.png"),
+    guide: encodeURI("./assets/knowledge-maps/phrase-guide.png"),
+    label: "短语知识地图",
+    level: "动宾短语"
+  },
+  sentence: {
+    background: encodeURI("./assets/knowledge-maps/sentence-background.png"),
+    guide: encodeURI("./assets/knowledge-maps/sentence-guide.png"),
+    label: "句子知识地图",
+    level: "被字句"
+  }
+};
 const WORD_STAGE_ONE_ASSETS = {
   reference: encodeURI("./assets/word-stage1/iPad Pro1_ - 81.png"),
   findInstruction: encodeURI("./assets/word-stage1/Group 474.png"),
@@ -82,6 +127,27 @@ const WORD_STAGE_THREE_ASSETS = {
   scroll: encodeURI("./assets/word-stage3/Group 507.png"),
   next: encodeURI("./assets/word-stage3/next.png")
 };
+
+const WORD_STAGE_THREE_GUIDED_TASKS = [
+  {
+    id: "meaning",
+    options: ["在哪里", "是什么样的"],
+    correct: "是什么样的",
+    feedback: "对了，“妹妹”说明归属，“干净”“漂亮”说明或评价东西的样子。"
+  },
+  {
+    id: "form",
+    options: ["物品", "谁/怎么样"],
+    correctOrder: ["谁/怎么样", "物品"],
+    feedback: "对了，表达先说明谁或什么样，再用“的”连接后面的东西或人。"
+  },
+  {
+    id: "use",
+    options: ["水杯是谁的", "水杯什么时候买的"],
+    correct: "水杯是谁的",
+    feedback: "对了，这里要说明归属，可以说：“请拿妈妈的水杯。”"
+  }
+];
 const WORD_STAGE_FOUR_ASSETS = {
   background: encodeURI("./assets/word-stage4/background.png"),
   grammarBook: encodeURI("./assets/word-stage3/Group 507.png"),
@@ -161,7 +227,7 @@ const PHRASE_STAGE_ONE_ASSETS = {
     actions: {
       wipe: encodeURI("./assets/phrase-stage1/Group 174.png"),
       arrange: encodeURI("./assets/phrase-stage1/Group 175.png"),
-      hang: encodeURI("./assets/phrase-stage1/Group 176.png"),
+      hang: encodeURI("./assets/resource-icons/hang.png"),
       stick: encodeURI("./assets/phrase-stage1/Group 177.png"),
       water: encodeURI("./assets/phrase-stage1/Group 178.png"),
       sweep: encodeURI("./assets/phrase-stage1/Group 179.png"),
@@ -184,10 +250,19 @@ const PHRASE_STAGE_TWO_ASSETS = {
   answerFrame: encodeURI("./assets/phrase-stage2/Goup 461.png"),
   answerQuestion: encodeURI("./assets/phrase-stage2/Group 454.png"),
   resourceFrame: encodeURI("./assets/phrase-stage2/Group 463.png"),
+  resultScenes: {
+    "wipe-blackboard": encodeURI("./assets/phrase-stage1/Group 191.png"),
+    "hang-works": encodeURI("./assets/phrase-stage1/Group 518.png"),
+    "stick-labels": encodeURI("./assets/phrase-stage1/Group 519.png"),
+    "water-flower": encodeURI("./assets/phrase-stage1/Group 523.png"),
+    "sweep-floor": encodeURI("./assets/phrase-stage1/Group 521.png"),
+    "move-boxes": encodeURI("./assets/phrase-stage1/Group 520.png"),
+    "arrange-desks": encodeURI("./assets/phrase-stage1/Group 522.png")
+  },
   actions: {
     wipe: encodeURI("./assets/phrase-stage1/Group 174.png"),
     arrange: encodeURI("./assets/phrase-stage1/Group 175.png"),
-    hang: encodeURI("./assets/phrase-stage1/Group 176.png"),
+    hang: encodeURI("./assets/resource-icons/hang.png"),
     stick: encodeURI("./assets/phrase-stage1/Group 177.png"),
     water: encodeURI("./assets/phrase-stage1/Group 178.png"),
     sweep: encodeURI("./assets/phrase-stage1/Group 179.png"),
@@ -242,6 +317,27 @@ const PHRASE_STAGE_THREE_ASSETS = {
   scroll: encodeURI("./assets/phrase-stage3/Group 508.png"),
   next: encodeURI("./assets/word-stage3/next.png")
 };
+
+const PHRASE_STAGE_THREE_GUIDED_TASKS = [
+  {
+    id: "meaning",
+    options: ["谁来完成", "什么对象"],
+    correct: "什么对象",
+    feedback: "对了，这些短语告诉我们做什么，以及动作针对什么对象。"
+  },
+  {
+    id: "form",
+    options: ["动作", "对象"],
+    correctOrder: ["动作", "对象"],
+    feedback: "对了，这些短语都是动作在前，对象在后。"
+  },
+  {
+    id: "use",
+    options: ["动作针对的对象", "谁喜欢劳动"],
+    correct: "动作针对的对象",
+    feedback: "对了，可以补上“黑板”或“桌子”，让同学知道要擦什么。"
+  }
+];
 const PHRASE_STAGE_FOUR_ASSETS = {
   background: encodeURI("./assets/phrase-stage4/Group 456.png"),
   resourceDock: encodeURI("./assets/phrase-stage4/Group 388.png"),
@@ -257,7 +353,7 @@ const PHRASE_STAGE_FOUR_ASSETS = {
   objects: {
     watermelon: encodeURI("./assets/phrase-stage4/Group 390.png"),
     apple: encodeURI("./assets/phrase-stage4/Group 391.png"),
-    banana: encodeURI("./assets/phrase-stage4/Group 392.png"),
+    banana: encodeURI("./assets/resource-icons/banana.png"),
     pear: encodeURI("./assets/phrase-stage4/图片 9 (2) 2.png"),
     orange: encodeURI("./assets/phrase-stage4/Group 397.png"),
     grape: encodeURI("./assets/phrase-stage4/Group 398.png"),
@@ -268,7 +364,7 @@ const PHRASE_STAGE_FOUR_ASSETS = {
   },
   taskArt: {
     "wash-apple": encodeURI("./assets/phrase-stage4/Group 380.png"),
-    "cut-watermelon": encodeURI("./assets/phrase-stage4/Group 381.png"),
+    "cut-watermelon": encodeURI("./assets/phrase-stage4/Group 381.png?v=cut-watermelon-centered-1"),
     "take-banana": encodeURI("./assets/phrase-stage4/Group 384.png"),
     "take-strawberry": encodeURI("./assets/phrase-stage4/Group 404.png"),
     "wash-grape-result": encodeURI("./assets/phrase-stage4/Group 228.png"),
@@ -336,6 +432,15 @@ const SENTENCE_STAGE_ONE_ASSETS = {
 };
 const SENTENCE_STAGE_TWO_ASSETS = {
   background: encodeURI("./assets/sentence-stage2/竹林地图_元素重排 1.png"),
+  resultScenes: {
+    lion: "./assets/sentence-stage2/result-scenes/lion.png",
+    alpaca: "./assets/sentence-stage2/result-scenes/alpaca.png",
+    otter: "./assets/sentence-stage2/result-scenes/otter.png",
+    rabbit: "./assets/sentence-stage2/result-scenes/rabbit.png",
+    elephant: "./assets/sentence-stage2/result-scenes/elephant.png",
+    duck: "./assets/sentence-stage2/result-scenes/duck.png",
+    kangaroo: "./assets/sentence-stage2/result-scenes/kangaroo.png"
+  },
   instruction: encodeURI("./assets/instructions/Group 486.png"),
   resourceDock: encodeURI("./assets/sentence-stage2/Group 423.png"),
   lockedBook: encodeURI("./assets/sentence-stage2/grammar-book-locked.png"),
@@ -406,6 +511,27 @@ const SENTENCE_STAGE_THREE_ASSETS = {
   scroll: encodeURI("./assets/sentence-stage3/Group 512.png"),
   next: encodeURI("./assets/word-stage3/next.png")
 };
+
+const SENTENCE_STAGE_THREE_GUIDED_TASKS = [
+  {
+    id: "meaning",
+    options: ["想主动做什么", "受到了什么处理或影响"],
+    correct: "受到了什么处理或影响",
+    feedback: "对了，小兔子和小象是受到包扎、冲洗影响的一方。"
+  },
+  {
+    id: "form",
+    options: ["承受者", "做动作的一方", "动作及结果"],
+    correctOrder: ["承受者", "做动作的一方", "动作及结果"],
+    feedback: "对了，句子先说受到影响的一方，再说明做动作的人和动作结果。"
+  },
+  {
+    id: "use",
+    options: ["法法接下来要做什么", "小兔子受到了什么处理"],
+    correct: "小兔子受到了什么处理",
+    feedback: "对了，可以说：“小兔子被法法包扎好了。”"
+  }
+];
 const SENTENCE_STAGE_FOUR_ASSETS = {
   backgrounds: {
     bread: encodeURI("./assets/sentence-stage4/iPad Pro 11_ - 94.png"),
@@ -460,6 +586,37 @@ const PHRASE_RESTORE_HINT_SECONDS = PHRASE_RESTORE_HINT_DELAY_MS / 1000;
 const SENTENCE_CARE_HINT_DELAY_MS = 15_000;
 const SENTENCE_CARE_HINT_SECONDS = SENTENCE_CARE_HINT_DELAY_MS / 1000;
 const REFLECTION_FEEDBACK_DURATION_MS = 1_600;
+const SECOND_STAGE_REFLECTION_CARD = encodeURI("./assets/stage2-reflection/Group 707.png");
+const SECOND_STAGE_REFLECTION_BUTTON = encodeURI("./assets/stage2-reflection/Group 704.png");
+const SECOND_STAGE_REFLECTIONS = {
+  word: {
+    "yellow-pencil": { expression: "黄色的铅笔", prompt: "“黄色的铅笔”说的是哪一样东西？", options: ["黄色", "铅笔"], correct: "铅笔", wrong: "想一想，你刚才拿起来的是颜色，还是一样东西？", right: "对了，说的是铅笔；“黄色”进一步说明它是什么颜色。" },
+    "red-box": { expression: "红色的收纳盒", prompt: "“红色的收纳盒”中的“红色”，说明什么的颜色？", options: ["收纳盒", "房间"], correct: "收纳盒", wrong: "把“红色的”和后面的词连起来读一读。", right: "对了，“红色”说明的是收纳盒的颜色，不是房间的颜色。" },
+    "clean-clothes": { expression: "干净的衣服", prompt: "“干净的衣服”中的“干净”，告诉我们衣服的什么信息？", options: ["衣服属于谁", "衣服是什么样的"], correct: "衣服是什么样的", wrong: "这里有没有说某个人的名字？再想想“干净”说明了衣服什么。", right: "对了，“干净”说明衣服现在的样子，没有告诉我们衣服是谁的。" },
+    "sister-doll": { expression: "妹妹的玩偶", prompt: "“妹妹的玩偶”中的“妹妹”，告诉我们什么？", options: ["玩偶是谁的", "玩偶长什么样"], correct: "玩偶是谁的", wrong: "想一想，“妹妹”是一个人，还是玩偶的颜色、样子？", right: "对了，这里“妹妹”说明玩偶属于谁。" },
+    "mom-cup": { expression: "妈妈的水杯／妹妹的水杯", prompt: "从“妈妈的水杯”变成“妹妹的水杯”，改变的是什么？", options: ["东西的种类", "东西属于谁"], correct: "东西属于谁", wrong: "两边都说“水杯”。找一找不一样的是哪一部分。", right: "对了，东西都还是水杯，改变的是它属于谁。" },
+    "fafa-book": { expression: "法法的书", prompt: "“法法的书”中，哪一部分说明书是谁的？", options: ["法法", "书"], correct: "法法", wrong: "先找到表示东西的“书”，再看哪一部分说明它属于谁。", right: "对了，“法法”说明书是谁的，“书”说明是什么东西。" },
+    "pretty-sticker": { expression: "漂亮的贴纸", prompt: "“漂亮的贴纸”中的“漂亮”，告诉我们什么？", options: ["贴纸是谁的", "对贴纸样子的评价"], correct: "对贴纸样子的评价", wrong: "“漂亮”是在说一个人的名字，还是在评价贴纸的样子？", right: "对了，“漂亮”表达对贴纸样子的评价，并没有说明贴纸属于谁。" }
+  },
+  phrase: {
+    "wipe-blackboard": { expression: "擦黑板", prompt: "“擦黑板”中的“黑板”，回答了哪个问题？", options: ["擦什么", "谁来擦"], correct: "擦什么", wrong: "先看动作“擦”，再想想后面的词补充了什么信息。", right: "对了，“黑板”告诉我们擦什么，是这个动作针对的对象。" },
+    "hang-works": { expression: "挂作品", prompt: "“挂作品”中，哪一部分说明要做的动作？", options: ["作品", "挂"], correct: "挂", wrong: "想一想，哪个词告诉同学要做什么动作，而不是拿什么东西。", right: "对了，“挂”说明动作，“作品”说明挂什么。" },
+    "stick-labels": { expression: "贴标签", prompt: "“贴标签”有没有告诉我们是谁来贴？", options: ["有，是标签", "没有说谁来贴"], correct: "没有说谁来贴", wrong: "“标签”是被贴的东西。再看看短语里有没有说做这件事的人。", right: "对了，它说清了动作和对象，但没有说谁来贴。" },
+    "water-flower": { expression: "浇花／浇草", prompt: "从“浇花”变成“浇草”，哪一部分改变了？", options: ["动作针对的对象", "做什么动作"], correct: "动作针对的对象", wrong: "两边都有“浇”。找一找“浇”后面的词有什么不同。", right: "对了，动作都是“浇”，对象从花换成了草。" },
+    "sweep-floor": { expression: "扫纸屑", prompt: "“扫纸屑”中，说明动作的词在什么位置？", options: ["前面", "后面"], correct: "前面", wrong: "先找出说明动作的“扫”，再看看它在“纸屑”的前面还是后面。", right: "对了，“扫”在前面，“纸屑”在后面，分别说明动作和对象。" },
+    "move-boxes": { expression: "搬纸箱", prompt: "“搬纸箱”中的“纸箱”，告诉我们什么？", options: ["谁来搬", "搬什么"], correct: "搬什么", wrong: "想一想，是纸箱在搬东西，还是我们要搬纸箱？", right: "对了，“纸箱”告诉我们搬什么，并没有告诉我们谁来搬。" },
+    "arrange-desks": { expression: "摆桌椅／擦桌椅", prompt: "从“摆桌椅”变成“擦桌椅”，改变的是什么？", options: ["做什么动作", "动作针对的对象"], correct: "做什么动作", wrong: "两边的对象都是“桌椅”。看看前面的词有什么变化。", right: "对了，对象仍然是桌椅，动作从“摆”换成了“擦”。" }
+  },
+  sentence: {
+    lion: { expression: "小狮子被法法哄睡着。", prompt: "“小狮子被法法哄睡着”中，接受安抚并睡着的是谁？", options: ["小狮子", "法法"], correct: "小狮子", wrong: "先找“被”前面说的是谁，再想想谁受到了安抚。", right: "对了，小狮子接受安抚并睡着了；法法是哄它的人。" },
+    alpaca: { expression: "羊驼被法法梳理好毛发。", prompt: "“羊驼被法法梳理好毛发”中，是谁给羊驼梳理毛发？", options: ["羊驼", "法法"], correct: "法法", wrong: "看一看“被”后面写的是谁，再想想谁做了梳理这个动作。", right: "对了，法法进行了梳理；羊驼是受到梳理的一方。" },
+    otter: { expression: "小水獭被法法喂饱。", prompt: "“小水獭被法法喂饱”中的“喂饱”，说明了什么？", options: ["法法自己吃饱了", "小水獭接受喂食后吃饱了"], correct: "小水獭接受喂食后吃饱了", wrong: "“被”前面是小水獭。想一想，这句话是在说谁受到喂食后的变化。", right: "对了，法法喂小水獭，小水獭吃饱了。" },
+    rabbit: { expression: "小兔子被法法包扎好。", prompt: "“小兔子被法法包扎好”中，小兔子是做包扎的人，还是接受包扎的一方？", options: ["接受包扎的一方", "做包扎的人"], correct: "接受包扎的一方", wrong: "不要只看谁排在最前面。把“小兔子被法法包扎好”完整读一遍。", right: "对了，小兔子在这里是接受包扎的一方，法法做了包扎。" },
+    elephant: { expression: "小象被法法冲洗干净。／小兔子被法法冲洗干净。", prompt: "从“小象被法法冲洗干净”变成“小兔子被法法冲洗干净”，改变的是谁？", options: ["进行冲洗的人", "受到冲洗的一方"], correct: "受到冲洗的一方", wrong: "两句话中“法法”和“冲洗干净”都没变，看看哪只动物换了。", right: "对了，冲洗的人仍然是法法，受到冲洗的动物变了。" },
+    duck: { expression: "小鸭子被法法放进水池。", prompt: "“小鸭子被法法放进水池”中的“法法”，说明谁？", options: ["做放入动作的人", "被放进水池的一方"], correct: "做放入动作的人", wrong: "看看是谁把小鸭子放进去的。", right: "法法做了放入动作，小鸭子是被放进去的一方。" },
+    kangaroo: { expression: "小袋鼠被法法擦干。", prompt: "“小袋鼠被法法擦干”这句话先说谁，再说明它受到的处理？", options: ["法法", "小袋鼠"], correct: "小袋鼠", wrong: "从句子的开头读一读，看看先介绍的是受到擦拭的一方，还是擦拭的人。", right: "对了，句子先说小袋鼠，再说明它被法法擦干了。" }
+  }
+};
 const STAGE_FOUR_ERROR_FEEDBACK_DURATION_MS = 5_000;
 // Keep the sweeping gesture forgiving: each broad pass visibly clears part
 // of the debris, mirroring the blackboard-cleaning progression.
@@ -533,7 +690,7 @@ const findTasks = [
     clueText: "书桌与床边之间",
     intent: "区分颜色与物品类别",
     success: "找到了！黄色这个线索帮助你找到了铅笔。",
-    hint: "再看一看任务卡前面的颜色。你要找的是这个颜色的物品。",
+    hint: "点法法再听一次，注意物品的颜色。",
     position: { left: 548, top: 356 },
     distractors: [
       { id: "red-pencil", label: "红色铅笔", modId: "red", objId: "pencil", position: { left: 642, top: 348 } }
@@ -559,7 +716,7 @@ const findTasks = [
     clueText: "床底收纳区",
     intent: "区分红色的与盒子",
     success: "找到了！红色这个线索帮你认出了收纳盒。",
-    hint: "再看一看任务卡，颜色和物品剪影都要一样。",
+    hint: "点法法再听一次，颜色和物品都要听清楚。",
     position: { left: 128, top: 392 },
     distractors: [
       { id: "blue-box", label: "蓝色收纳盒", modId: "blue", objId: "box", position: { left: 76, top: 306 } },
@@ -586,7 +743,7 @@ const findTasks = [
     clueText: "椅背衣物堆",
     intent: "理解状态可以说明物品",
     success: "找到了！闪亮图标表示这件衣服是干净的。",
-    hint: "看看任务卡前面的闪亮线索，要找干净的那一件。",
+    hint: "点法法再听一次，注意衣服的状态。",
     position: { left: 350, top: 146 },
     distractors: [
       { id: "dirty-clothes", label: "脏衣服", modId: "dirty", objId: "clothes", position: { left: 444, top: 146 } }
@@ -612,7 +769,7 @@ const findTasks = [
     clueText: "地毯与玩具篮旁",
     intent: "理解人物信息表示归属",
     success: "找到了！妹妹头像表示这件东西和妹妹有关。",
-    hint: "妹妹头像说明东西属于妹妹。再找找妹妹要的是哪件东西。",
+    hint: "点法法再听一次，注意物品是谁的。",
     position: { left: 704, top: 392 },
     distractors: [],
     restore: {
@@ -636,7 +793,7 @@ const findTasks = [
     clueText: "书桌一角",
     intent: "区分是谁的与是什么东西",
     success: "找到了！妈妈头像告诉你，这是妈妈的水杯。",
-    hint: "先看是谁的，再看是什么东西。",
+    hint: "点法法再听一次，注意水杯是谁的。",
     position: { left: 940, top: 270 },
     distractors: [
       { id: "sister-cup", label: "妹妹的水杯", modId: "sister", objId: "cup", position: { left: 818, top: 326 } }
@@ -662,7 +819,7 @@ const findTasks = [
     clueText: "地板书堆",
     intent: "理解主角头像所代表的我的",
     success: "找到了！法法头像在这里表示我的东西。",
-    hint: "法法头像代表你自己，要找属于你的那本书。",
+    hint: "点法法再听一次，注意书是谁的。",
     position: { left: 382, top: 430 },
     distractors: [
       { id: "mom-magazine", label: "妈妈的杂志", modId: "mom", objId: "magazine", position: { left: 474, top: 422 } }
@@ -688,7 +845,7 @@ const findTasks = [
     clueText: "收纳架下层",
     intent: "体验主观描写也能说明物品",
     success: "找到了！星星线索表示漂亮、喜欢的感觉。",
-    hint: "找一找带星星感觉，又像贴纸的东西。",
+    hint: "点法法再听一次，注意贴纸是什么样的。",
     position: { left: 918, top: 132 },
     distractors: [],
     restore: {
@@ -1021,6 +1178,10 @@ const phraseStage4TaskFruit = {
 
 const state = {
   stage: "home",
+  stageOneAudioAutoPlayKey: null,
+  stageOneAudioIncludeInstruction: false,
+  homeMenuOpen: false,
+  homeCategoryIntroPlayed: false,
   category: "word",
   findIndex: 0,
   foundIds: [],
@@ -1046,6 +1207,9 @@ const state = {
   restoredIds: [],
   restoreCompleteView: false,
   bookVisited: false,
+  wordStageThreeGuideIndex: 0,
+  wordStageThreeSummaryReady: false,
+  wordStageThreeGuideSelections: [],
   transferIndex: 0,
   transferSelections: { modifier: null, object: null },
   transferSingleSelection: null,
@@ -1078,6 +1242,9 @@ const state = {
   phraseRestoreResourceOrder: { actions: [], objects: [] },
   phraseRestoreCompletedIds: [],
   phraseBookVisited: false,
+  phraseStageThreeGuideIndex: 0,
+  phraseStageThreeSummaryReady: false,
+  phraseStageThreeGuideSelections: [],
   phraseBookReturnStage: null,
   phraseTransferIndex: 0,
   phraseTransferSelections: { action: null, object: null },
@@ -1118,6 +1285,9 @@ const state = {
   sentenceCareReady: false,
   sentenceCareCompletedIds: [],
   sentenceBookVisited: false,
+  sentenceStageThreeGuideIndex: 0,
+  sentenceStageThreeSummaryReady: false,
+  sentenceStageThreeGuideSelections: [],
   sentenceBookReturnStage: null,
   sentenceTransferIndex: 0,
   sentenceTransferSelections: { value: null, object: null, result: null },
@@ -1157,9 +1327,18 @@ const stageFourErrorTimers = {
 };
 let audioContext = null;
 let stageThreeNarrationKey = null;
+let stageThreeNarrationTimer = null;
+let stageThreeCompletionTimer = null;
 let stageEntryNarrationKey = null;
 let stageEntryNarrationTimer = null;
-const FEEDBACK_SOUND_GAIN = 1.8;
+let activeSpeechRoute = null;
+let speechRequestId = 0;
+let pendingVoiceListener = null;
+let secondStageFeedbackTimer = null;
+let secondStageFeedbackToken = 0;
+let secondStageFeedbackFinish = null;
+// Raise all feedback effects by 12 dB while retaining their relative levels.
+const FEEDBACK_SOUND_GAIN = 7.2;
 
 function getAudioContext() {
   if (audioContext) return audioContext;
@@ -1177,6 +1356,19 @@ function playSound(effect) {
 
   const sequences = {
     click: [{ frequency: 560, duration: 0.045, volume: 0.035 }],
+    mapOpen: [
+      { frequency: 523, duration: 0.08, volume: 0.024 },
+      { frequency: 659, duration: 0.12, delay: 0.07, volume: 0.028 }
+    ],
+    mapBack: [
+      { frequency: 659, duration: 0.07, volume: 0.022 },
+      { frequency: 523, duration: 0.1, delay: 0.06, volume: 0.024 }
+    ],
+    mapStart: [
+      { frequency: 587, duration: 0.08, volume: 0.028 },
+      { frequency: 784, duration: 0.1, delay: 0.07, volume: 0.032 },
+      { frequency: 988, duration: 0.16, delay: 0.16, volume: 0.036 }
+    ],
     pick: [{ frequency: 420, duration: 0.06, volume: 0.03 }],
     drop: [
       { frequency: 520, duration: 0.07, volume: 0.035 },
@@ -1211,7 +1403,7 @@ function playSound(effect) {
     const noteEnd = noteStart + note.duration;
     oscillator.type = note.type || "sine";
     oscillator.frequency.setValueAtTime(note.frequency, noteStart);
-    gain.gain.setValueAtTime(Math.min(note.volume * FEEDBACK_SOUND_GAIN, 0.12), noteStart);
+    gain.gain.setValueAtTime(Math.min(note.volume * FEEDBACK_SOUND_GAIN, 0.4), noteStart);
     gain.gain.exponentialRampToValueAtTime(0.0001, noteEnd);
     oscillator.connect(gain);
     gain.connect(context.destination);
@@ -1220,10 +1412,23 @@ function playSound(effect) {
   });
 }
 
+let lastRenderedStage = null;
+let stageTransitionAnimation = null;
+const PLAY_STAGES = new Set(['find', 'restore', 'book', 'transfer', 'phrase-find', 'phrase-restore', 'phrase-book', 'phrase-transfer', 'sentence-find', 'sentence-care', 'sentence-book', 'sentence-transfer']);
+
 function render() {
+  const stageChanged = lastRenderedStage !== state.stage;
+  const showTransition = stageChanged && PLAY_STAGES.has(lastRenderedStage) && PLAY_STAGES.has(state.stage);
+  lastRenderedStage = state.stage;
+  if (stageChanged) stageTransitionAnimation?.cancel();
+  syncSpeechRoute();
   syncStageThreeNarrationState();
   const game = document.getElementById("game");
+  game.classList.remove("celebration-layout");
   game.classList.toggle("home-layout", state.stage === "home");
+  game.classList.toggle("word-map-layout", state.stage === "word-map");
+  game.classList.toggle("phrase-map-layout", state.stage === "phrase-map");
+  game.classList.toggle("sentence-map-layout", state.stage === "sentence-map");
   game.classList.toggle("scene-layout", state.stage === "find" || state.stage === "restore");
   game.classList.toggle("find-layout", state.stage === "find");
   game.classList.toggle("restore-layout", state.stage === "restore");
@@ -1244,6 +1449,9 @@ function render() {
   updateStory();
 
   if (state.stage === "home") renderHome();
+  if (state.stage === "word-map") renderWordMap();
+  if (state.stage === "phrase-map") renderKnowledgeMap("phrase");
+  if (state.stage === "sentence-map") renderKnowledgeMap("sentence");
   if (state.stage === "find") renderFind();
   if (state.stage === "restore") renderRestore();
   if (state.stage === "book") renderBook();
@@ -1257,6 +1465,12 @@ function render() {
   if (state.stage === "sentence-book") renderSentenceBook();
   if (state.stage === "sentence-transfer") renderSentenceTransfer();
   playStageEntryNarration();
+  if (showTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    stageTransitionAnimation = view.animate(
+      [{ opacity: 0.15, transform: 'translateY(6px)' }, { opacity: 1, transform: 'translateY(0)' }],
+      { duration: 380, easing: 'ease-out' }
+    );
+  }
 }
 
 function syncStageLocks() {
@@ -1292,7 +1506,7 @@ function updateProgress() {
 function updateStory() {
   const lines = {
     home: "",
-    find: "根据视觉卡片，帮法法找出房间里的对应物品。",
+    find: "听取语音提示，帮法法找出对应物品。",
     restore: "用找到的资源组合短语，再把物品放回原位。",
     book: "看看整理行动拼出的“的”小桥规则。",
     transfer: "整理书包，把物品放进对应口袋。"
@@ -1301,22 +1515,30 @@ function updateStory() {
 }
 
 function renderHome() {
+  if (!state.homeMenuOpen) {
+    view.innerHTML = `
+      <section class="home-canvas home-title-screen" aria-label="语文知识乐园首页">
+        <img class="home-title-background" src="${HOME_BACKGROUND_ASSET}" alt="孩子们在草地上快乐学习" />
+        <button class="home-start-button" type="button" aria-label="开始游戏">
+          <img src="${HOME_START_BUTTON_ASSET}" alt="开始游戏" />
+        </button>
+      </section>
+    `;
+    view.querySelector(".home-start-button").addEventListener("click", () => {
+      playSound("click");
+      state.homeMenuOpen = true;
+      render();
+    });
+    return;
+  }
+
   view.innerHTML = `
-    <section class="home-canvas" aria-label="知识分类首页">
-      <img class="home-top-instruction" src="${HOME_INSTRUCTION_ASSET}" alt="跟着小主人公法法，一起学习语法知识" />
-      <div class="home-category-grid">
-        <button class="home-category-card is-active" type="button" data-home-category="word" aria-label="进入词类知识：助动词-的">
-          <span class="home-category-icon home-category-icon-word" aria-hidden="true">词</span>
-          <span class="home-category-text"><span class="home-category-label">词类知识</span><span class="home-category-topic">助动词-的</span></span>
-        </button>
-        <button class="home-category-card is-active" type="button" data-home-category="phrase" aria-label="进入短语知识：动宾短语">
-          <span class="home-category-icon home-category-icon-phrase" aria-hidden="true">短</span>
-          <span class="home-category-text"><span class="home-category-label">短语知识</span><span class="home-category-topic">动宾短语</span></span>
-        </button>
-        <button class="home-category-card is-active" type="button" data-home-category="sentence" aria-label="进入句子知识：被字句">
-          <span class="home-category-icon home-category-icon-sentence" aria-hidden="true">句</span>
-          <span class="home-category-text"><span class="home-category-label">句子知识</span><span class="home-category-topic">被字句</span></span>
-        </button>
+    <section class="home-canvas home-category-screen" aria-label="知识分类首页">
+      <img class="home-category-background" src="${HOME_CATEGORIES_BACKGROUND}" alt="" />
+      <div class="home-category-hotspots">
+        <button class="home-category-hit" type="button" data-home-category="word" aria-label="进入词类知识：助动词-的"><img src="${HOME_CATEGORY_CARD_ASSETS.word}" alt="" /></button>
+        <button class="home-category-hit" type="button" data-home-category="phrase" aria-label="进入短语知识：动宾短语"><img src="${HOME_CATEGORY_CARD_ASSETS.phrase}" alt="" /></button>
+        <button class="home-category-hit" type="button" data-home-category="sentence" aria-label="进入句子知识：被字句"><img src="${HOME_CATEGORY_CARD_ASSETS.sentence}" alt="" /></button>
       </div>
     </section>
   `;
@@ -1325,12 +1547,98 @@ function renderHome() {
     button.addEventListener("click", () => {
       if (button.dataset.homeCategory === "word") {
         state.category = "word";
-        setStage("find");
+        setStage("word-map", "mapOpen");
       }
-      if (button.dataset.homeCategory === "phrase") startPhraseLevel();
-      if (button.dataset.homeCategory === "sentence") startSentenceLevel();
+      if (button.dataset.homeCategory === "phrase") {
+        state.category = "phrase";
+        setStage("phrase-map", "mapOpen");
+      }
+      if (button.dataset.homeCategory === "sentence") {
+        state.category = "sentence";
+        setStage("sentence-map", "mapOpen");
+      }
     });
   });
+
+  if (!state.homeCategoryIntroPlayed) {
+    state.homeCategoryIntroPlayed = true;
+    speakPhrase("跟着小主人公法法，一起开启语法之旅吧。");
+  }
+}
+
+function mapToolsHtml() {
+  return `<div class="word-map-tools" aria-label="地图工具">
+    <button class="word-map-back" type="button" aria-label="返回分类页"><img src="${WORD_STAGE_ONE_ASSETS.back}" alt=""></button>
+    <button type="button" data-map-tool="book" aria-label="语法宝典"><img src="${WORD_STAGE_THREE_ASSETS.book}" alt=""></button>
+    <button type="button" data-map-tool="sound" aria-label="音乐按钮" aria-pressed="${state.sound}"><img src="${WORD_STAGE_ONE_ASSETS.sound}" class="${state.sound ? "" : "is-muted"}" alt=""></button>
+  </div>`;
+}
+
+function bindMapTools(category, renderMap) {
+  const book = view.querySelector('[data-map-tool="book"]');
+  book.addEventListener("click", () => {
+    const art = category === "word" ? WORD_STAGE_FOUR_ASSETS.grammarBook
+      : category === "phrase" ? PHRASE_STAGE_THREE_ASSETS.scroll : SENTENCE_STAGE_THREE_ASSETS.scroll;
+    const label = category === "word" ? "定语短语语法宝典"
+      : category === "phrase" ? "动宾短语语法宝典" : "被字句语法宝典";
+    view.querySelector(".word-map-screen").insertAdjacentHTML("beforeend", stageFourGrammarOverlayHtml(art, label, category));
+    const overlay = view.querySelector(".stage-four-grammar-overlay");
+    const close = () => { overlay.remove(); book.focus(); };
+    overlay.querySelectorAll("[data-stage-four-book-close]").forEach(button => button.addEventListener("click", close));
+    overlay.addEventListener("keydown", event => {
+      if (event.key === "Escape") { event.stopPropagation(); close(); }
+    });
+    overlay.querySelector(".stage-four-grammar-close").focus();
+  });
+  view.querySelector('[data-map-tool="sound"]').addEventListener("click", () => toggleSound(renderMap));
+}
+
+function renderWordMap() {
+  view.innerHTML = `
+    <section class="word-map-screen" aria-label="词类知识地图">
+      <img class="word-map-background" src="${WORD_MAP_ASSETS.background}" alt="词类知识岛屿地图" />
+      ${mapToolsHtml()}
+      <button class="word-map-node is-current" type="button" aria-label="开始助动词-的关卡"><img src="${WORD_MAP_ASSETS.activeNode}" alt="" /></button>
+      <img class="word-map-guide" src="${WORD_MAP_ASSETS.guide}" alt="助动词-的学习向导" />
+      <button class="word-map-next" type="button" aria-label="进入助动词-的关卡"></button>
+    </section>
+  `;
+  bindMapTools("word", renderWordMap);
+  view.querySelector(".word-map-back").addEventListener("click", () => {
+    playSound("mapBack");
+    setStage("home");
+  });
+  const enterLevel = () => {
+    state.category = "word";
+    setStage("find", "mapStart");
+  };
+  view.querySelector(".word-map-node").addEventListener("click", enterLevel);
+  view.querySelector(".word-map-next").addEventListener("click", enterLevel);
+}
+
+function renderKnowledgeMap(category) {
+  const map = KNOWLEDGE_MAP_ASSETS[category];
+  view.innerHTML = `
+    <section class="word-map-screen knowledge-map-screen ${category}-map-screen" aria-label="${map.label}">
+      <img class="word-map-background" src="${map.background}" alt="${map.label}岛屿地图" />
+      ${mapToolsHtml()}
+      <button class="word-map-node is-current" type="button" aria-label="开始${map.level}关卡"><img src="${KNOWLEDGE_MAP_ASSETS.activeNode}" alt="" /></button>
+      <img class="word-map-guide" src="${map.guide}" alt="${map.level}学习向导" />
+      <button class="word-map-next" type="button" aria-label="进入${map.level}关卡"></button>
+    </section>
+  `;
+  bindMapTools(category, () => renderKnowledgeMap(category));
+  view.querySelector(".word-map-back").addEventListener("click", () => {
+    playSound("mapBack");
+    setStage("home");
+  });
+  const enterLevel = () => {
+    playSound("mapStart");
+    if (category === "phrase") startPhraseLevel();
+    else startSentenceLevel();
+  };
+  view.querySelector(".word-map-node").addEventListener("click", enterLevel);
+  view.querySelector(".word-map-next").addEventListener("click", enterLevel);
 }
 
 function startPhraseLevel() {
@@ -1355,6 +1663,9 @@ function startPhraseLevel() {
   stopPhraseRestoreHintTimer();
   state.phraseRestoreCompletedIds = [];
   state.phraseBookVisited = false;
+  state.phraseStageThreeGuideIndex = 0;
+  state.phraseStageThreeSummaryReady = false;
+  state.phraseStageThreeGuideSelections = [];
   state.phraseBookReturnStage = null;
   state.phraseTransferIndex = 0;
   state.phraseTransferSelections = { action: null, object: null };
@@ -1363,6 +1674,7 @@ function startPhraseLevel() {
   state.phraseTransferReady = false;
   state.phraseTransferredIds = [];
   clearPhraseError();
+  queueStageOneAutoPlayback("phrase", phraseFindTasks[0], { includeInstruction: true });
   render();
 }
 
@@ -1402,6 +1714,9 @@ function startSentenceLevel() {
   state.sentenceCareReady = false;
   state.sentenceCareCompletedIds = [];
   state.sentenceBookVisited = false;
+  state.sentenceStageThreeGuideIndex = 0;
+  state.sentenceStageThreeSummaryReady = false;
+  state.sentenceStageThreeGuideSelections = [];
   state.sentenceBookReturnStage = null;
   state.sentenceTransferIndex = 0;
   state.sentenceTransferSelections = { value: null, object: null, result: null };
@@ -1411,6 +1726,7 @@ function startSentenceLevel() {
   state.sentenceTransferredIds = [];
   clearSentenceError();
   setFeedback("看结果图，找到需要照顾的动物。");
+  queueStageOneAutoPlayback("sentence", sentenceDemoTasks[0], { includeInstruction: true });
   render();
 }
 
@@ -1526,7 +1842,10 @@ function toggleSound(afterRender) {
   state.sound = !state.sound;
   soundToggle.setAttribute("aria-pressed", String(state.sound));
   soundToggle.querySelector("span").textContent = state.sound ? "♪" : "×";
-  if (!state.sound && "speechSynthesis" in window) window.speechSynthesis.cancel();
+  if (!state.sound) {
+    cancelActiveSpeech();
+    secondStageFeedbackFinish?.();
+  }
   if (state.sound && currentStageThreeCategory()) stageThreeNarrationKey = null;
   afterRender();
   refreshStageEntryNarrationForSound();
@@ -1579,7 +1898,9 @@ function scheduleStageFourErrorDismiss(category) {
   }, STAGE_FOUR_ERROR_FEEDBACK_DURATION_MS);
 }
 
-function setStage(stage) {
+function setStage(stage, soundEffect = "click") {
+  state.stageOneAudioAutoPlayKey = null;
+  state.stageOneAudioIncludeInstruction = false;
   if (state.stage === "find" && state.category === "word" && stage !== "find") {
     stopWordStageOneHintTimer();
     state.wordStageOneHintTarget = null;
@@ -1614,7 +1935,10 @@ function setStage(stage) {
   if (stage === "restore" && state.foundIds.length !== findTasks.length) return;
   if (stage === "book" && state.restoredIds.length !== findTasks.length) return;
   if (stage === "transfer" && !state.bookVisited && state.transferredIds.length === 0) return;
-  if (state.stage !== stage) playSound("click");
+  if (stage === "find" && state.category === "word" && state.stage !== "find") {
+    queueStageOneAutoPlayback("word", findTasks[state.findIndex], { includeInstruction: true });
+  }
+  if (state.stage !== stage) playSound(soundEffect);
   state.stage = stage;
   render();
 }
@@ -2069,17 +2393,15 @@ function phraseFindResourceAssetHtml(kind, id) {
 }
 
 function phraseFindBottomHtml(task) {
-  const questionSrc = PHRASE_STAGE_ONE_ASSETS.questions[state.phraseFindIndex];
   const hasEarnedResources = state.phraseResources.actions.length > 0
     && state.phraseResources.objects.length > 0;
   return `
     <div class="phrase-find-bottom ${hasEarnedResources ? "" : "is-resources-hidden"}" aria-label="资源栏和题目">
-      ${phraseFindSceneAsset("phrase-find-bottom-frame", PHRASE_STAGE_ONE_ASSETS.bottom)}
       <div class="phrase-find-earned-list phrase-find-earned-actions">${state.phraseResources.actions.map((id) => phraseFindResourceAssetHtml("actions", id)).join("")}</div>
       <div class="phrase-find-earned-list phrase-find-earned-objects">${state.phraseResources.objects.map((id) => phraseFindResourceAssetHtml("objects", id)).join("")}</div>
-      <div class="phrase-find-question-art" aria-label="题目">${phraseFindSceneAsset("phrase-find-question-image", questionSrc, task.result)}</div>
       <p id="sceneMessage" class="scene-message sr-only">${feedbackText.textContent}</p>
     </div>
+    <div class="phrase-find-question-art">${stageOneAudioButtonHtml(task.phrase, "phrase-stage-one-audio", task.id)}</div>
   `;
 }
 
@@ -2115,6 +2437,7 @@ function renderPhraseFind() {
   `;
 
   view.querySelectorAll("[data-phrase-find-item]").forEach((button) => button.addEventListener("click", () => handlePhraseFindClick(button.dataset.phraseFindItem)));
+  bindStageOneAudio();
   bindPhraseRagTask(task);
   bindPhraseChairTask(task);
   bindPhraseSceneDragTask(task);
@@ -2136,8 +2459,8 @@ function completePhraseFindTask(task, message = null) {
   state.phraseResources.objects.push(task.object);
   setFeedback(message || `${task.phrase}。准备完成！`);
   playSound("success");
-  speakPhrase(task.phrase);
   state.phraseFindIndex += 1;
+  queueStageOneAutoPlayback("phrase", phraseFindTasks[state.phraseFindIndex]);
   // Keep the completed action on screen briefly before showing the next task.
   window.setTimeout(render, 680);
 }
@@ -2162,7 +2485,7 @@ function handlePhraseFindClick(objectId) {
   wrong?.classList.add("is-wrong");
   window.setTimeout(() => wrong?.classList.remove("is-wrong"), 320);
   playSound("wrong");
-  setFeedback("再看看结果图，想一想这个动作会作用在哪个对象上。");
+  setFeedback("再听一遍题目，想一想这个动作会作用在哪个对象上。");
 }
 
 function bindPhraseRagTask(task) {
@@ -2776,6 +3099,7 @@ function renderFind() {
   view.querySelectorAll("[data-find-item]").forEach((button) => {
     button.addEventListener("click", () => handleFindClick(button.dataset.findItem));
   });
+  if (isWordStageOne) bindStageOneAudio();
   bindFindTools();
   if (isWordStageOne) startWordStageOneHintTimer();
 }
@@ -2828,8 +3152,9 @@ function findResourceDockHtml() {
 
 function wordStageOneToolsHtml(actionPrefix = "find", options = {}) {
   const actionAttribute = `data-${actionPrefix}-action`;
-  const bookSrc = options.bookSrc || WORD_STAGE_ONE_ASSETS.book;
-  const bookDisabled = options.bookDisabled ? "disabled" : "";
+  const isBookDisabled = options.bookDisabled !== false;
+  const bookSrc = isBookDisabled ? WORD_STAGE_ONE_ASSETS.book : options.bookSrc || WORD_STAGE_ONE_ASSETS.book;
+  const bookDisabled = isBookDisabled ? "disabled" : "";
   return `
     <div class="find-corner-tools word-stage-one-tools" aria-label="第一阶段工具">
       <button class="find-tool-button" type="button" ${actionAttribute}="home" aria-label="返回首页">
@@ -2837,7 +3162,7 @@ function wordStageOneToolsHtml(actionPrefix = "find", options = {}) {
         <span class="sr-only">返回首页</span>
       </button>
       <div class="find-tool-right">
-        <button class="find-tool-button" type="button" ${actionAttribute}="book" aria-label="语法宝典" ${bookDisabled}>
+        <button class="find-tool-button" type="button" ${actionAttribute}="book" aria-label="${isBookDisabled ? "语法宝典未开启" : "语法宝典"}" ${bookDisabled}>
           <img src="${bookSrc}" alt="" />
           <span class="sr-only">语法宝典</span>
         </button>
@@ -2851,10 +3176,11 @@ function wordStageOneToolsHtml(actionPrefix = "find", options = {}) {
 }
 
 function wordStageOneFindInstructionHtml() {
-  const label = STAGE_ENTRY_NARRATIONS["word:find"];
+  const label = "听语音，找一找";
   return `
     <div class="word-stage-one-find-instruction" aria-label="${label}">
       <img src="${WORD_STAGE_ONE_ASSETS.findInstruction}" alt="${label}" />
+      <span class="stage-one-instruction-corrected" aria-hidden="true">${label}</span>
     </div>
   `;
 }
@@ -2862,21 +3188,24 @@ function wordStageOneFindInstructionHtml() {
 function stageInstructionHtml(stage) {
   const isThirdStage = stage === "three";
   const label = isThirdStage
-    ? "请认真学习这个这个知识点哦"
+    ? "请认真学习这个知识点哦！"
     : "运用学到的知识，继续完成新任务吧";
   return `
-    <div class="stage-top-instruction" aria-label="${label}">
+    <div class="stage-top-instruction${isThirdStage ? " stage-top-instruction-book" : ""}" aria-label="${label}">
       <img src="${STAGE_INSTRUCTION_ASSETS[stage]}" alt="${label}" />
+      ${isThirdStage ? `<span class="stage-top-instruction-corrected" aria-hidden="true">${label}</span>` : ""}
     </div>
   `;
 }
 
 function phraseStageInstructionHtml(stage) {
   const isFirstStage = stage === "one";
-  const label = STAGE_ENTRY_NARRATIONS[isFirstStage ? "phrase:phrase-find" : "phrase:phrase-restore"];
+  const label = isFirstStage ? "听语音，做一做" : STAGE_ENTRY_NARRATIONS["phrase:phrase-restore"];
+  const corrected = isFirstStage ? `<span class="stage-one-instruction-corrected" aria-hidden="true">${label}</span>` : "";
   return `
     <div class="stage-top-instruction" aria-label="${label}">
       <img src="${PHRASE_STAGE_INSTRUCTION_ASSETS[stage]}" alt="${label}" />
+      ${corrected}
     </div>
   `;
 }
@@ -2884,16 +3213,69 @@ function phraseStageInstructionHtml(stage) {
 function wordStageOneQuestionHtml(task) {
   return `
     <aside class="word-stage-one-question" aria-label="找一找题目">
-      <img class="word-stage-one-question-frame" src="./assets/word-stage1/Group 516.png" alt="" aria-hidden="true">
-      <div class="word-stage-one-question-content">
-        ${wordStageOneModifierVisual(task.modId)}
-        <span class="word-stage-one-plus" aria-hidden="true">+</span>
-        ${wordStageOneObjectVisual(task.id, task.objId)}
-        <span class="word-stage-one-equals" aria-hidden="true">=</span>
-        <span class="word-stage-one-question-mark" aria-hidden="true">?</span>
-      </div>
+      ${stageOneAudioButtonHtml(task.displayPhrase, "word-stage-one-audio", task.id)}
     </aside>
   `;
+}
+
+function stageOneAudioButtonHtml(text, className = "", taskId = "") {
+  return `<button class="stage-one-audio-button ${className}" type="button" data-stage-one-audio="${text}" data-stage-one-audio-key="${state.category}:${taskId}" aria-label="播放题目语音"><img class="stage-one-audio-character" src="${STAGE_ONE_AUDIO_BUTTON_ASSET}" alt=""></button>`;
+}
+
+function queueStageOneAutoPlayback(category, task, { includeInstruction = false } = {}) {
+  state.stageOneAudioAutoPlayKey = task ? `${category}:${task.id}` : null;
+  state.stageOneAudioIncludeInstruction = Boolean(task && includeInstruction);
+}
+
+function playStageOneAudio(button, text = button.dataset.stageOneAudio, onEnd = null) {
+  const stopSpeakingAnimation = () => {
+    button.classList.remove("is-speaking");
+    button.setAttribute("aria-label", "播放题目语音");
+  };
+  stopSpeakingAnimation();
+  let finished = false;
+  const status = speakPhrase(
+    text,
+    currentSpeechRoute(),
+    () => {
+      if (finished) return;
+      finished = true;
+      stopSpeakingAnimation();
+      onEnd?.();
+    },
+    () => {
+      button.classList.add("is-speaking");
+      button.setAttribute("aria-label", "正在播放题目语音");
+    }
+  );
+  if (!status) stopSpeakingAnimation();
+}
+
+function bindStageOneAudio() {
+  const buttons = [...view.querySelectorAll("[data-stage-one-audio]")];
+  buttons.forEach((button) => button.addEventListener("click", () => playStageOneAudio(button)));
+  const autoPlayButton = buttons.find((button) => button.dataset.stageOneAudioKey === state.stageOneAudioAutoPlayKey);
+  if (autoPlayButton) {
+    const instruction = state.stageOneAudioIncludeInstruction
+      ? view.querySelector(".stage-one-instruction-corrected")?.textContent.trim()
+      : null;
+    state.stageOneAudioAutoPlayKey = null;
+    state.stageOneAudioIncludeInstruction = false;
+    if (instruction) {
+      const route = currentSpeechRoute();
+      const taskKey = autoPlayButton.dataset.stageOneAudioKey;
+      playStageOneAudio(autoPlayButton, instruction, () => {
+        if (!state.sound || currentSpeechRoute() !== route) return;
+        // A scene can re-render while the instruction is speaking. Continue
+        // with its current button only if this is still the same question.
+        const currentButton = [...view.querySelectorAll("[data-stage-one-audio]")]
+          .find((button) => button.dataset.stageOneAudioKey === taskKey);
+        if (currentButton) playStageOneAudio(currentButton);
+      });
+    } else {
+      playStageOneAudio(autoPlayButton);
+    }
+  }
 }
 
 function wordStageOneScenePropsHtml() {
@@ -2964,7 +3346,7 @@ function wordStageResourceIds(kind) {
 function wordStageTwoResourceDockHtml() {
   const renderResource = (kind, id) => {
     const resource = state.resources.find((item) => item.kind === kind && item.id === id);
-    if (!resource) return `<span class="word-stage-one-resource word-stage-one-resource-empty" aria-hidden="true"></span>`;
+    if (!resource) return "";
     return `
       <button class="word-stage-one-resource word-stage-two-resource-card" type="button" data-resource-key="${resource.resourceKey}" data-kind="${kind}" aria-label="放入${resource.label}">
         ${wordStageOneResourceVisual(resource)}
@@ -2973,17 +3355,20 @@ function wordStageTwoResourceDockHtml() {
     `;
   };
   const renderGroup = (kind) => wordStageResourceIds(kind).map((id) => renderResource(kind, id)).join("");
+  const modifiersHtml = renderGroup("modifier");
+  const objectsHtml = renderGroup("object");
+  if (!modifiersHtml && !objectsHtml) return "";
 
   return `
     <aside class="word-stage-one-resource-dock word-stage-two-resource-dock" aria-label="资源栏">
-      <section class="word-stage-one-resource-group word-stage-one-modifiers" aria-label="说明资源">
+      ${modifiersHtml ? `<section class="word-stage-one-resource-group word-stage-one-modifiers" aria-label="说明资源">
         <h3 class="sr-only">说明资源</h3>
-        <div>${renderGroup("modifier")}</div>
-      </section>
-      <section class="word-stage-one-resource-group word-stage-one-objects" aria-label="物品资源">
+        <div>${modifiersHtml}</div>
+      </section>` : ""}
+      ${objectsHtml ? `<section class="word-stage-one-resource-group word-stage-one-objects" aria-label="物品资源">
         <h3 class="sr-only">物品资源</h3>
-        <div>${renderGroup("object")}</div>
-      </section>
+        <div>${objectsHtml}</div>
+      </section>` : ""}
     </aside>
   `;
 }
@@ -3038,7 +3423,7 @@ function bindFindTools() {
         state.sound = !state.sound;
         soundToggle.setAttribute("aria-pressed", String(state.sound));
         soundToggle.querySelector("span").textContent = state.sound ? "♪" : "×";
-        if (!state.sound && "speechSynthesis" in window) window.speechSynthesis.cancel();
+        if (!state.sound) cancelActiveSpeech();
         renderFind();
         refreshStageEntryNarrationForSound();
       }
@@ -3125,8 +3510,8 @@ function handleFindClick(itemId) {
     state.resources.push({ ...objects[task.objId], resourceKey: `${task.id}-obj` });
     setFeedback(task.success);
     playSound("success");
-    speakPhrase(task.displayPhrase);
     state.findIndex += 1;
+    queueStageOneAutoPlayback("word", findTasks[state.findIndex]);
     setTimeout(render, 520);
     return;
   }
@@ -3252,8 +3637,6 @@ function phraseRestoreTaskSceneHtml(task, isComplete) {
   } else if (task.object === "desks") {
     parts.push(image(isComplete ? scene.tableChairs : scene.table, breathe("phrase-stage2-table"), "桌子"));
     if (!isComplete) parts.push(image(scene.fallenChair, breathe("phrase-stage2-fallen-chair"), "歪倒的椅子"));
-    if (isComplete) parts.push(image(scene.fallenChair, "phrase-stage2-fallen-chair phrase-stage2-complete-fading", "歪倒的椅子"));
-    if (isComplete) parts.push(image(scene.fallenChair, "phrase-stage2-arranged-chair", "摆好的椅子"));
   } else if (task.object === "works") {
     parts.push(image(isComplete ? scene.framedArtwork : scene.artwork, breathe(`phrase-stage2-artwork ${isComplete ? "is-hung" : ""}`), "画作"));
   } else if (task.object === "labels") {
@@ -3279,147 +3662,78 @@ function secondStageLessonCountdownHtml() {
   return `<span class="second-stage-lesson-countdown" aria-label="3秒后自动关闭"></span>`;
 }
 
-function phraseRestoreLessonHtml(task) {
-  const actionAsset = PHRASE_STAGE_TWO_ASSETS.actions[task.action];
-  const objectAsset = PHRASE_STAGE_TWO_ASSETS.objects[task.object];
-  const result = task.object === "flower" ? "浇花" : phraseHtml(task.phrase);
+function secondStageReflectionHtml(category, task, selected, error) {
+  const reflection = SECOND_STAGE_REFLECTIONS[category][task.id];
+  const choiceAttribute = {
+    word: "data-restore-reflection-choice",
+    phrase: "data-phrase-restore-reflection-choice",
+    sentence: "data-sentence-care-reflection-choice"
+  }[category];
+  const promptSize = reflection.prompt.length > 38 ? "is-very-long" : reflection.prompt.length > 26 ? "is-long" : "";
   return `
-    <div class="restore-lesson-overlay phrase-restore-lesson-overlay" role="dialog" aria-modal="true" aria-label="动词和对象搭配提示">
-        <section class="restore-lesson-card phrase-restore-lesson-card">
-        ${secondStageLessonCountdownHtml()}
-        <div class="lesson-bridge-row" aria-label="动作和对象组成动宾短语">
-          <div class="lesson-card-piece"><img class="phrase-restore-lesson-image" src="${actionAsset}" alt="${phraseActions[task.action].label}"></div>
-          <div class="lesson-de phrase-lesson-plus" aria-hidden="true">+</div>
-          <div class="lesson-card-piece"><img class="phrase-restore-lesson-image" src="${objectAsset}" alt="${phraseObjects[task.object].label}"></div>
-          <div class="lesson-equals" aria-hidden="true">=</div>
-          <strong class="phrase-restore-lesson-phrase">${result}</strong>
+    <div class="restore-lesson-overlay second-stage-reflection-overlay" role="dialog" aria-modal="true" aria-label="反思题">
+      <section class="second-stage-reflection-card ${promptSize}" style="background-image:url('${SECOND_STAGE_REFLECTION_CARD}')">
+        <div class="second-stage-reflection-content">
+          <p class="second-stage-reflection-prompt">${reflection.prompt}</p>
+          <div class="second-stage-reflection-options">
+            ${reflection.options.map((option, index) => `
+              <button class="second-stage-reflection-option ${selected === option ? "is-selected" : ""} ${error === option ? "is-wrong" : ""}" type="button" ${choiceAttribute}="${index}" style="background-image:url('${SECOND_STAGE_REFLECTION_BUTTON}')">
+                ${option}
+              </button>
+            `).join("")}
+          </div>
         </div>
       </section>
     </div>
   `;
 }
 
-const phraseRestoreReflectionPrompts = {
-  "wipe-blackboard": {
-    prompt: "“黑板”在短语中表示什么？",
-    options: [
-      { id: "object", label: "对象" },
-      { id: "action", label: "动作" }
-    ],
-    correct: "object",
-    feedback: "意义：动宾短语说明动作做了什么，或和什么事物有关。"
-  },
-  "arrange-desks": {
-    prompt: "“桌椅”在短语中表示什么？",
-    options: [
-      { id: "action", label: "动作" },
-      { id: "object", label: "对象" }
-    ],
-    correct: "object",
-    feedback: "意义：动宾短语说明动作做了什么，或和什么事物有关。"
-  },
-  "hang-works": {
-    prompt: "“挂”和“作品”谁在前？",
-    options: [
-      { id: "action", label: "动作“挂”" },
-      { id: "object", label: "对象“作品”" }
-    ],
-    correct: "action",
-    feedback: "规则：动词放在前面，后面跟着对象。"
-  },
-  "stick-labels": {
-    prompt: "“标签”回答了什么问题？",
-    options: [
-      { id: "what", label: "贴什么" },
-      { id: "who", label: "谁在贴" }
-    ],
-    correct: "what",
-    feedback: "使用：讲清楚一件事怎么做时，要把动作和对象搭配好。"
-  },
-  "water-flower": {
-    prompt: "“浇花”后谁变化了？",
-    options: [
-      { id: "flower", label: "花" },
-      { id: "fafa", label: "法法" }
-    ],
-    correct: "flower",
-    feedback: "使用：讲清楚一件事怎么做时，要把动作和对象搭配好。"
-  },
-  "sweep-floor": {
-    prompt: "“纸屑”在短语中表示什么？",
-    options: [
-      { id: "object", label: "对象" },
-      { id: "action", label: "动作" }
-    ],
-    correct: "object",
-    feedback: "意义：动宾短语说明动作做了什么，或和什么事物有关。"
-  },
-  "move-boxes": {
-    prompt: "“搬”的对象需要有什么特点？",
-    options: [
-      { id: "movable", label: "能移动" },
-      { id: "colorful", label: "颜色好看" }
-    ],
-    correct: "movable",
-    feedback: "使用：讲清楚一件事怎么做时，要把动作和对象搭配好。"
+function secondStageResultHtml(category, task) {
+  const labeledPiece = (visual, label) => `
+    <span class="second-stage-result-term">
+      <span class="second-stage-result-piece">${visual}</span>
+      <strong class="second-stage-result-label">${label}</strong>
+    </span>`;
+  let parts;
+  if (category === "word") {
+    parts = `
+      ${labeledPiece(wordStageOneModifierVisual(task.modId), modifiers[task.modId].label)}
+      <span class="second-stage-result-operator is-connector">的</span>
+      ${labeledPiece(wordStageOneObjectVisual(task.id, task.objId), objects[task.objId].label)}
+      <span class="second-stage-result-operator">=</span>
+      <span class="second-stage-result-picture" data-result-object="${task.objId}" role="img" aria-label="${task.displayPhrase}">${wordStageOneSceneObjectVisual(task.objId)}</span>`;
+  } else if (category === "phrase") {
+    parts = `
+      ${labeledPiece(`<img src="${PHRASE_STAGE_TWO_ASSETS.actions[task.action]}" alt="">`, phraseActions[task.action].label)}
+      <span class="second-stage-result-operator is-connector">+</span>
+      ${labeledPiece(`<img src="${PHRASE_STAGE_ONE_ASSETS.resources.objects[task.object]}" alt="">`, phraseObjects[task.object].label)}
+      <span class="second-stage-result-operator">=</span>
+      <span class="second-stage-result-picture"><img src="${PHRASE_STAGE_TWO_ASSETS.resultScenes[task.id]}" alt="${task.phrase}" draggable="false"></span>`;
+  } else {
+    parts = `
+      ${labeledPiece(`<img src="${SENTENCE_STAGE_TWO_ASSETS.animals[task.animal].resource}" alt="">`, sentenceAnimals[task.animal].label)}
+      <span class="second-stage-result-operator is-connector">被法法</span>
+      ${labeledPiece(`<img src="${SENTENCE_STAGE_TWO_ASSETS.resultResources[task.care]}" alt="">`, sentenceCareResources[task.care].label)}
+      <span class="second-stage-result-operator">=</span>
+      <span class="second-stage-result-picture"><img src="${SENTENCE_STAGE_TWO_ASSETS.resultScenes[task.animal]}" alt="${task.sentence}" draggable="false"></span>`;
   }
-};
-
-function phraseRestoreReflectionPrompt(task) {
-  return phraseRestoreReflectionPrompts[task.id] || phraseRestoreReflectionPrompts["wipe-blackboard"];
+  return `
+    <div class="restore-lesson-overlay second-stage-result-overlay" role="dialog" aria-modal="true" aria-label="组合结果">
+      <section class="second-stage-result-card second-stage-result-${category}">${parts}</section>
+    </div>
+  `;
 }
 
-function phraseRestoreReflectionPromptHtml(task, reflection) {
-  if (["wipe-blackboard", "arrange-desks", "stick-labels", "sweep-floor"].includes(task.id)) {
-    const objectSrc = PHRASE_STAGE_ONE_ASSETS.resources.objects[task.object];
-    const promptTail = task.id === "stick-labels" ? "回答了什么问题？" : "在短语中表示什么？";
-    return `
-      <span class="phrase-reflection-prompt-icon"><img src="${objectSrc}" alt="${task.id === "wipe-blackboard" ? "黑板" : task.id === "arrange-desks" ? "桌椅" : task.id === "stick-labels" ? "标签" : "纸屑"}"></span>
-      <span>${promptTail}</span>
-    `;
-  }
-  if (task.id === "move-boxes") {
-    const actionSrc = PHRASE_STAGE_ONE_ASSETS.resources.actions[task.action];
-    return `
-      <span class="phrase-reflection-prompt-icon"><img src="${actionSrc}" alt="搬"></span>
-      <span>的对象需要有什么特点？</span>
-    `;
-  }
-  if (task.id !== "hang-works") return reflection.prompt;
-  const actionSrc = PHRASE_STAGE_ONE_ASSETS.resources.actions[task.action];
-  const objectSrc = PHRASE_STAGE_ONE_ASSETS.resources.objects[task.object];
-  return `
-    <span class="phrase-reflection-prompt-icon"><img src="${actionSrc}" alt="挂"></span>
-    <span aria-hidden="true">和</span>
-    <span class="phrase-reflection-prompt-icon"><img src="${objectSrc}" alt="作品"></span>
-    <span>谁在前？</span>
-  `;
+function phraseRestoreLessonHtml(task) {
+  return secondStageResultHtml("phrase", task);
+}
+
+function phraseRestoreReflectionPrompt(task) {
+  return SECOND_STAGE_REFLECTIONS.phrase[task.id];
 }
 
 function phraseRestoreReflectionHtml(task) {
-  const reflection = phraseRestoreReflectionPrompt(task);
-  const promptLabel = task.id === "hang-works"
-    ? "挂和作品谁在前？"
-    : task.id === "stick-labels"
-      ? "标签回答了什么问题？"
-      : task.id === "sweep-floor"
-        ? "纸屑在短语中表示什么？"
-      : reflection.prompt;
-  return `
-    <div class="restore-lesson-overlay phrase-restore-reflection-overlay" role="dialog" aria-modal="true" aria-label="短语反思题">
-      <section class="phrase-restore-reflection-card">
-        <p class="phrase-restore-reflection-prompt" aria-label="${promptLabel}">${phraseRestoreReflectionPromptHtml(task, reflection)}</p>
-        <div class="phrase-restore-reflection-options">
-          ${reflection.options.map((option, index) => `
-            <button class="phrase-restore-reflection-option ${state.phraseRestoreReflectionSelection === option.id ? "is-selected" : ""} ${state.phraseRestoreReflectionError === option.id ? "is-wrong" : ""}" type="button" data-phrase-restore-reflection-choice="${option.id}">
-              <span class="phrase-restore-reflection-letter">${String.fromCharCode(65 + index)}.</span>
-              <span>${option.label}</span>
-            </button>
-          `).join("")}
-        </div>
-      </section>
-    </div>
-  `;
+  return secondStageReflectionHtml("phrase", task, state.phraseRestoreReflectionSelection, state.phraseRestoreReflectionError);
 }
 
 function phraseRestoreCountdownHtml() {
@@ -3449,6 +3763,7 @@ function renderPhraseRestore() {
   const task = phraseFindTasks[state.phraseRestoreIndex];
   const isComplete = state.phraseRestoreShowingComplete;
   const isReflecting = state.phraseRestoreReflection === task.id;
+  const compactAnswerSlots = Boolean(state.phraseRestoreHint || state.phraseRestoreReady || isComplete);
   view.innerHTML = `
     <div class="phrase-restore-canvas">
       <section class="phrase-restore-wire-scene" aria-label="修复班级任务">
@@ -3457,11 +3772,10 @@ function renderPhraseRestore() {
         <section class="phrase-restore-task-panel phrase-stage2-task-${task.object} ${isComplete ? "is-complete" : ""}" aria-label="任务场景和答题区">
           <div class="phrase-restore-task-scene">
             <div class="phrase-restore-mini-scene">${phraseRestoreTaskSceneHtml(task, isComplete)}</div>
-            <strong class="phrase-restore-scene-caption">${isComplete ? task.result : ""}</strong>
           </div>
           <section class="phrase-restore-instruction-panel" aria-label="答题区和接取任务的同学">
             <h2>接取任务</h2>
-            <div class="phrase-restore-slots">
+            <div class="phrase-restore-slots ${compactAnswerSlots ? "is-compact" : ""}">
               <img class="phrase-stage2-answer-frame" src="${PHRASE_STAGE_TWO_ASSETS.answerFrame}" alt="" draggable="false">
               ${phraseRestoreSlotHtml("action", "动作", task)}
               ${phraseRestoreSlotHtml("object", "对象", task)}
@@ -3490,21 +3804,22 @@ function bindPhraseRestoreEvents() {
   view.querySelectorAll("[data-phrase-restore-reflection-choice]").forEach((button) => {
     button.addEventListener("click", () => {
       const task = phraseFindTasks[state.phraseRestoreIndex];
-      if (!task || state.phraseRestoreReflection !== task.id) return;
+      if (!task || state.phraseRestoreReflection !== task.id || state.phraseRestoreReflectionError) return;
       const reflection = phraseRestoreReflectionPrompt(task);
-      const choice = button.dataset.phraseRestoreReflectionChoice;
+      const choice = reflection.options[Number(button.dataset.phraseRestoreReflectionChoice)];
+      if (!choice) return;
       state.phraseRestoreReflectionSelection = choice;
       if (choice !== reflection.correct) {
         state.phraseRestoreReflectionError = choice;
         playSound("wrong");
         renderPhraseRestore();
-        window.setTimeout(() => {
+        playSecondStageFeedback(reflection.wrong, () => {
           if (state.phraseRestoreReflection === task.id && state.phraseRestoreReflectionError === choice) {
             state.phraseRestoreReflectionError = null;
             state.phraseRestoreReflectionSelection = null;
             renderPhraseRestore();
           }
-        }, REFLECTION_FEEDBACK_DURATION_MS);
+        });
         return;
       }
       state.phraseRestoreReflection = null;
@@ -3514,7 +3829,9 @@ function bindPhraseRestoreEvents() {
       setFeedback("现在看语法讲解。");
       playSound("success");
       renderPhraseRestore();
-      schedulePhraseRestoreLessonAutoExit(task);
+      playSecondStageFeedback(reflection.right, () => {
+        if (state.phraseRestoreLesson === task.id) dismissPhraseRestoreLesson();
+      });
     });
   });
   if (state.phraseRestoreShowingComplete) return;
@@ -3830,48 +4147,11 @@ function wordStageTwoQuestionHtml(task, isPlaced) {
 }
 
 function wordStageTwoReflectionPrompt(task) {
-  const reflection = restoreReflectionPrompt(task);
-  const objectLabel = objects[task.objId].label;
-  const modifier = modifiers[task.modId];
-  const taskIndex = findTasks.findIndex((item) => item.id === task.id);
-  // Keep the two choices stable for a question, but alternate the correct
-  // position across the stage so it is not always the first answer.
-  const options = taskIndex % 2 === 0
-    ? [...reflection.options].reverse()
-    : reflection.options;
-  return {
-    ...reflection,
-    options,
-    prompt: modifier.type === "owner"
-      ? `表示${objectLabel}是谁的？`
-      : `表示${objectLabel}的什么？`
-  };
+  return SECOND_STAGE_REFLECTIONS.word[task.id];
 }
 
 function wordStageTwoReflectionHtml(task) {
-  const reflection = wordStageTwoReflectionPrompt(task);
-  const isOwnerQuestion = modifiers[task.modId]?.type === "owner";
-  const visual = isOwnerQuestion
-    ? `<div class="word-stage-two-reflection-relation" aria-hidden="true"><div class="word-stage-two-reflection-visual">${wordStageOneModifierVisual(task.modId)}</div><span class="word-stage-two-reflection-and">和</span><div class="word-stage-two-reflection-visual">${wordStageOneObjectVisual(task.id, task.objId)}</div></div>`
-    : `<div class="word-stage-two-reflection-visual">${wordStageOneModifierVisual(task.modId)}</div>`;
-  const prompt = isOwnerQuestion
-    ? "是什么关系？"
-    : reflection.prompt;
-  return `
-    <div class="restore-lesson-overlay word-stage-two-reflection-overlay" role="dialog" aria-modal="true" aria-label="词类知识反思题">
-      <section class="word-stage-two-reflection-card">
-        ${visual}
-        <p class="word-stage-two-reflection-prompt ${isOwnerQuestion ? "is-owner-question" : ""}">${prompt}</p>
-        <div class="word-stage-two-reflection-options">
-          ${reflection.options.map((option, index) => `
-            <button class="word-stage-two-reflection-option ${state.restoreReflectionSelection === option.id ? "is-selected" : ""} ${state.restoreReflectionError === option.id ? "is-wrong" : ""}" type="button" data-restore-reflection-choice="${option.id}">
-              <span>${String.fromCharCode(65 + index)}.${option.label}</span>
-            </button>
-          `).join("")}
-        </div>
-      </section>
-    </div>
-  `;
+  return secondStageReflectionHtml("word", task, state.restoreReflectionSelection, state.restoreReflectionError);
 }
 
 function wordStageTwoAnswerSlotHtml(kind, task) {
@@ -3969,7 +4249,7 @@ function renderWordRestoreComplete() {
       <div class="word-stage-two-background" aria-label="整理完成的房间"></div>
       ${wordStageTwoReferenceObjectsHtml()}
       ${wordStageTwoPlacedObjectsHtml()}
-      ${wordStageOneToolsHtml("restore", { bookSrc: WORD_STAGE_ONE_ASSETS.wordBook })}
+      ${wordStageOneToolsHtml("restore", { bookSrc: WORD_STAGE_ONE_ASSETS.wordBook, bookDisabled: false })}
     </div>
   `;
   bindRestoreTools();
@@ -4013,7 +4293,7 @@ function bindRestoreTools() {
         state.sound = !state.sound;
         soundToggle.setAttribute("aria-pressed", String(state.sound));
         soundToggle.querySelector("span").textContent = state.sound ? "♪" : "×";
-        if (!state.sound && "speechSynthesis" in window) window.speechSynthesis.cancel();
+        if (!state.sound) cancelActiveSpeech();
         renderRestore();
         refreshStageEntryNarrationForSound();
       }
@@ -4104,23 +4384,24 @@ function bindRestoreReflection() {
   view.querySelectorAll("[data-restore-reflection-choice]").forEach((button) => {
     button.addEventListener("click", () => {
       const task = findTasks[state.restoreIndex];
-      if (!task || !state.restoreReady || !restoreComboMatchesTask(task)) return;
+      if (!task || !state.restoreReady || !restoreComboMatchesTask(task) || state.restoreReflectionError) return;
       const reflection = state.category === "word"
         ? wordStageTwoReflectionPrompt(task)
         : restoreReflectionPrompt(task);
-      const choice = button.dataset.restoreReflectionChoice;
+      const choice = reflection.options[Number(button.dataset.restoreReflectionChoice)];
+      if (!choice) return;
       state.restoreReflectionSelection = choice;
       if (choice !== reflection.correct) {
         state.restoreReflectionError = choice;
         playSound("wrong");
         renderRestore();
-        window.setTimeout(() => {
+        playSecondStageFeedback(reflection.wrong, () => {
           if (state.restoreReflection === task.id && state.restoreReflectionError === choice) {
             state.restoreReflectionError = null;
             state.restoreReflectionSelection = null;
             renderRestore();
           }
-        }, REFLECTION_FEEDBACK_DURATION_MS);
+        });
         return;
       }
       state.restoreReflection = null;
@@ -4130,7 +4411,9 @@ function bindRestoreReflection() {
       setFeedback("现在看看语法提示。");
       playSound("success");
       renderRestore();
-      scheduleRestoreLessonAutoExit(task);
+      playSecondStageFeedback(reflection.right, () => {
+        if (state.restoreLesson === task.id) advanceRestoreAfterLesson();
+      });
     });
   });
 }
@@ -4268,21 +4551,7 @@ function restoreLessonHtml(task) {
 }
 
 function wordStageTwoLessonHtml(task) {
-  return `
-    <div class="restore-lesson-overlay word-stage-two-lesson-overlay" role="dialog" aria-modal="true" aria-label="语法小讲解">
-      <section class="word-stage-two-lesson-card">
-        ${secondStageLessonCountdownHtml()}
-        <div class="word-stage-two-lesson-row">
-          <div class="word-stage-two-lesson-piece">${wordStageOneModifierVisual(task.modId)}</div>
-          <div class="word-stage-two-lesson-de" aria-hidden="true">的</div>
-          <div class="word-stage-two-lesson-piece">${wordStageOneObjectVisual(task.id, task.objId)}</div>
-          <div class="word-stage-two-lesson-equals" aria-hidden="true">=</div>
-          <div class="word-stage-two-lesson-result" aria-label="合成后的${task.targetLabel}">${wordStageOneSceneObjectVisual(task.objId)}</div>
-          <strong class="word-stage-two-lesson-phrase">${task.displayPhrase}</strong>
-        </div>
-      </section>
-    </div>
-  `;
+  return secondStageResultHtml("word", task);
 }
 
 function restoreLessonMeaning(task) {
@@ -4698,16 +4967,102 @@ function renderPhraseBook() {
   setFeedback("动词在前面，对象在后面。一起去野餐试一试吧！");
 }
 
+/* All guides use independent artwork, live text, and interactive controls. */
+function bookGuideConfig(category) {
+  const shared = { panel: './assets/word-stage3/guided/question-panel.png', parchment: './assets/word-stage3/guided/parchment-blank.png' };
+  const configs = {
+    word: { tasks: WORD_STAGE_THREE_GUIDED_TASKS, attribute: 'data-guide-choice', next: 'data-book-action="next"', summary: WORD_STAGE_THREE_ASSETS.scroll,
+      prompts: ['这些表达可以说明东西是谁的，也可以说明东西____。', '把两张卡片拖放到合适位置', '你想请法法把妈妈那个拿过来。只说“拿水杯”还不够清楚，还需要说明____。'],
+      examples: './assets/word-stage3/guided/example-cards.png', scene: './assets/word-stage3/guided/cup-scene.png', formArt: './assets/word-stage3/guided/decorations.png', connector: '的',
+      rules: ['意义：东西是谁的，或它长什么样。', '规则：谁/什么样 + 的 + 东西/人。', '使用：特别说明东西是谁的，或它有什么特别之处。'] },
+    phrase: { tasks: PHRASE_STAGE_THREE_GUIDED_TASKS, attribute: 'data-phrase-guide-choice', next: 'data-phrase-book-reference-action="transfer"', summary: PHRASE_STAGE_THREE_ASSETS.scroll,
+      prompts: ['这些表达说明做什么动作，以及动作针对____。', '把两张卡片拖放到合适位置', '只说“擦”，同学还不知道该擦什么，还需要补充____。'],
+      examples: './assets/phrase-stage3/guided/example-cards.png', scene: './assets/phrase-stage3/guided/classroom-scene.png', formArt: './assets/phrase-stage3/guided/sweeping-card.png', connector: '＋',
+      rules: ['意义：说明动作做了什么，或和什么事物有关。', '规则：动作 ＋ 对象。', '使用：把动作和对象说清楚，让别人知道该做什么。'] },
+    sentence: { tasks: SENTENCE_STAGE_THREE_GUIDED_TASKS, attribute: 'data-sentence-guide-choice', next: 'data-sentence-book-action="next"', summary: SENTENCE_STAGE_THREE_ASSETS.scroll,
+      prompts: ['把小兔子、小象放在句子前面，是为了强调它们____。', '把三张卡片拖放到合适位置', '别人问“小兔子的伤口怎么样了”，我们应该说明____。'],
+      examples: './assets/sentence-stage3/guided/example-cards.png', scene: './assets/sentence-stage3/guided/scene.png', formArt: './assets/sentence-stage3/guided/scene.png', connector: '被',
+      rules: ['意义：强调承受者受到的影响或结果。', '规则：承受者 ＋ 被 ＋ 施加者（可省略）＋ 动作结果。', '使用：围绕受到影响的人或物说明情况。'] }
+  };
+  return { ...shared, ...configs[category] };
+}
+
+const bookGuideRenderedProgress = {};
+
+function bookGuideHtml(category, progress, selections) {
+  const newlyRevealed = progress > (bookGuideRenderedProgress[category] || 0) ? progress - 1 : -1;
+  bookGuideRenderedProgress[category] = progress;
+  const config = bookGuideConfig(category);
+  const revealingUse = progress >= config.tasks.length && !state[`${category}StageThreeSummaryReady`];
+  const complete = progress >= config.tasks.length && !revealingUse;
+  const questionIndex = Math.min(progress, config.tasks.length - 1);
+  if (complete) return `<section class="book-guide is-complete" data-book-category="${category}" aria-label="语法宝典总结">
+    <img class="book-guide-summary-art" src="${config.summary}" alt="${config.rules.join(' ')}">
+    <button class="book-guide-next" type="button" ${config.next} aria-label="进入下一阶段"><img src="${WORD_STAGE_THREE_ASSETS.next}" alt=""></button>
+  </section>`;
+  const task = config.tasks[questionIndex];
+  const picked = selections[questionIndex] || [];
+  const choices = task.options.map((option, index) => `<button class="book-guide-choice ${picked.includes(option) ? 'is-selected' : ''}" type="button" ${config.attribute}="${index}" ${revealingUse ? 'disabled' : ''} aria-pressed="${picked.includes(option)}" draggable="${Boolean(task.correctOrder && !picked.includes(option))}" data-book-drag-option="${index}">${option}</button>`).join('');
+  const slots = task.correctOrder?.map((_, index) => `${index === 1 ? `<span class="book-guide-connector">${config.connector}</span>` : ''}<span class="book-guide-drop ${picked[index] ? 'is-filled' : ''}" data-book-drop-index="${index}" aria-label="第${index + 1}个位置${picked[index] ? '：' + picked[index] : ''}">${picked[index] || ''}</span>`).join('');
+  const illustration = questionIndex === 0 ? `<img class="book-guide-examples" src="${config.examples}" alt="${category === 'word' ? '妹妹的玩偶、干净的衣服、漂亮的贴纸' : category === 'phrase' ? '擦黑板、搬纸箱、浇花' : '小象被法法冲洗干净、小兔子被法法包扎好'}">`
+    : questionIndex === 1 ? `<div class="book-guide-form ${category === 'sentence' ? 'is-sentence' : ''}">${slots}</div><img class="book-guide-form-art" src="${config.formArt}" alt="">`
+    : `<img class="book-guide-scene" src="${config.scene}" alt="${category === 'word' ? '桌上有两个不同的水杯' : category === 'phrase' ? '教室里的黑板和桌子' : '小兔子接受照护'}">`;
+  const rules = config.rules.map((rule, index) => `<li class="book-guide-rule ${index < progress ? 'is-revealed' : ''} ${index === newlyRevealed ? 'is-uncovering' : ''}">${index < progress ? `<span class="book-guide-rule-number">${index + 1}</span><span>${rule}</span>` : `<img src="./assets/word-stage3/guided/answer-bar.png" alt="第${index + 1}条待发现">`}</li>`).join('');
+  const prompt = category === 'word' && questionIndex === 2
+    ? '你想请法法把妈妈那个拿过<br>来。只说“<mark>拿水杯</mark>”还不够<br>清楚，还需要说明____。'
+    : category === 'phrase' && questionIndex === 0
+      ? '这些短语告诉我们做什么动作，也告诉我们动作针对<br>____。'
+    : category === 'phrase' && questionIndex === 2
+      ? '只说“<mark>擦</mark>”，同学还不知道<br>该擦什么，还需要补充<br>____。'
+    : category === 'sentence' && questionIndex === 0
+      ? '把小兔子、小象放在句子前面，是为了强调它们<br>____。'
+    : category === 'sentence' && questionIndex === 2
+      ? '别人问“<mark>小兔子的伤口怎么样了</mark>”，<br>我们应该说明____。'
+    : config.prompts[questionIndex];
+  return `<section class="book-guide ${revealingUse ? 'is-use-reveal' : ''}" data-book-category="${category}" data-guide-index="${questionIndex}" aria-label="语法宝典引导题第${questionIndex + 1}题">
+    <img class="book-guide-parchment" src="${config.parchment}" alt="">
+    <h2 class="book-guide-title">语法宝典</h2>
+    <div class="book-guide-board"><img class="book-guide-panel" src="${config.panel}" alt="">
+      <div class="book-guide-board-content"><p class="book-guide-prompt">${prompt}</p>${illustration}</div>
+    </div>
+    <div class="book-guide-choices" role="group" aria-label="答案选项">${choices}</div>
+    <ol class="book-guide-rules" aria-label="已发现的语法知识">${rules}</ol>
+  </section>`;
+}
+
+function bindBookGuideDrag() {
+  const guide = view.querySelector('.book-guide');
+  if (!guide || guide.classList.contains('is-complete')) return;
+  guide.querySelectorAll('[draggable="true"]').forEach(button => {
+    button.addEventListener('dragstart', event => {
+      event.dataTransfer.setData('text/book-guide-option', button.dataset.bookDragOption);
+      event.dataTransfer.effectAllowed = 'move';
+    });
+  });
+  guide.querySelectorAll('[data-book-drop-index]').forEach(slot => {
+    slot.addEventListener('dragover', event => { event.preventDefault(); event.dataTransfer.dropEffect = 'move'; });
+    slot.addEventListener('drop', event => {
+      event.preventDefault();
+      const option = event.dataTransfer.getData('text/book-guide-option');
+      if (!/^\d+$/.test(option)) return;
+      const firstEmpty = guide.querySelector('.book-guide-drop:not(.is-filled)');
+      if (slot !== firstEmpty) { setFeedback('请从左到右放入卡片。'); return; }
+      guide.querySelector(`[data-book-drag-option="${option}"]`)?.click();
+    });
+  });
+}
+
+function phraseStageThreeGuidedQuestionHtml() {
+  return bookGuideHtml("phrase", state.phraseStageThreeGuideIndex, state.phraseStageThreeGuideSelections);
+}
+
 function renderPhraseBookReference() {
   state.phraseBookVisited = true;
   view.innerHTML = `
     <div class="phrase-reference-stage">
       <img class="phrase-reference-background" src="${PHRASE_STAGE_THREE_ASSETS.background}" alt="教室背景">
+      <div class="word-guide-background-resources other-guide-background-resources" aria-hidden="true"><div data-title="动作资源"></div><div data-title="对象资源"></div></div>
       <div class="phrase-reference-dim" aria-hidden="true"></div>
-      <div class="phrase-reference-dock" aria-label="资源栏">
-        <span class="phrase-reference-dock-part phrase-reference-dock-left" aria-hidden="true"></span>
-        <span class="phrase-reference-dock-part phrase-reference-dock-right" aria-hidden="true"></span>
-      </div>
       <div class="phrase-reference-tools" aria-label="第三阶段工具">
         <button class="phrase-reference-tool phrase-reference-tool-back" type="button" data-phrase-book-reference-action="home" aria-label="返回首页"><img src="${PHRASE_STAGE_THREE_ASSETS.back}" alt=""></button>
         <div class="phrase-reference-tool-right">
@@ -4715,11 +5070,41 @@ function renderPhraseBookReference() {
           <button class="phrase-reference-tool" type="button" data-phrase-book-reference-action="sound" aria-label="音乐"><img src="${PHRASE_STAGE_THREE_ASSETS.sound}" alt=""></button>
         </div>
       </div>
-      ${stageInstructionHtml("three")}
-      <img class="phrase-reference-image phrase-reference-scroll" src="${PHRASE_STAGE_THREE_ASSETS.scroll}" alt="动宾短语语法宝典">
-      <button class="phrase-reference-hit phrase-reference-next" type="button" data-phrase-book-reference-action="transfer" aria-label="进入下一阶段"><img src="${PHRASE_STAGE_THREE_ASSETS.next}" alt=""></button>
+      ${phraseStageThreeGuidedQuestionHtml()}
     </div>
   `;
+  view.querySelectorAll("[data-phrase-guide-choice]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const index = state.phraseStageThreeGuideIndex;
+      const task = PHRASE_STAGE_THREE_GUIDED_TASKS[index];
+      if (!task) return;
+      const option = task.options[Number(button.dataset.phraseGuideChoice)];
+      const current = state.phraseStageThreeGuideSelections[index] || [];
+      if (task.correctOrder) {
+        const next = current.includes(option) ? current.filter((value) => value !== option) : [...current, option];
+        state.phraseStageThreeGuideSelections[index] = next;
+        if (next.length < task.correctOrder.length) {
+          setFeedback("两张卡片都放好后，再看看它们的位置。");
+          renderPhraseBookReference();
+          return;
+        }
+        if (next.join("|") !== task.correctOrder.join("|")) {
+          state.phraseStageThreeGuideSelections[index] = [];
+          setFeedback("先放“动作”，再放“对象”。");
+          renderPhraseBookReference();
+          return;
+        }
+      } else if (option !== task.correct) {
+        setFeedback(index === 0 ? "“黑板”“花”“纸箱”都是动作涉及的对象。" : "同学已经知道要“擦”，还不知道该擦什么。");
+        return;
+      } else {
+        state.phraseStageThreeGuideSelections[index] = [option];
+      }
+      state.phraseStageThreeGuideIndex += 1;
+      renderPhraseBookReference();
+      setFeedback(task.feedback);
+    });
+  });
   view.querySelectorAll("[data-phrase-book-reference-action]").forEach((button) => button.addEventListener("click", () => {
     const action = button.dataset.phraseBookReferenceAction;
     if (action === "home") setStage("home");
@@ -4727,8 +5112,13 @@ function renderPhraseBookReference() {
     if (action === "transfer") state.phraseBookReturnStage === "phrase-transfer" ? returnFromPhraseBook() : startPhraseTransfer();
     if (action === "sound") toggleSound(renderPhraseBookReference);
   }));
-  setFeedback("动词在前面，对象在后面。一起去野餐试一试吧！");
+  setFeedback(state.phraseStageThreeGuideIndex >= PHRASE_STAGE_THREE_GUIDED_TASKS.length ? "三条规则都补充好了，可以进入下一阶段。" : "读一读题目，选择合适的答案。");
+  bindBookGuideDrag();
   playStageThreeNarration("phrase");
+}
+
+function wordStageThreeGuidedQuestionHtml() {
+  return bookGuideHtml("word", state.wordStageThreeGuideIndex, state.wordStageThreeGuideSelections);
 }
 
 function renderBook() {
@@ -4738,10 +5128,10 @@ function renderBook() {
     <div class="word-stage-three-canvas">
       <div class="word-stage-three-background" aria-label="整理完成的房间">
         <div class="word-stage-two-background" aria-hidden="true"></div>
-        ${wordStageTwoReferenceObjectsHtml()}
+        <img class="word-guide-reference-room" src="./assets/word-stage2/reference-mask.png" alt="整理好的示例房间">
         ${wordStageTwoPlacedObjectsHtml()}
+        <div class="word-guide-background-resources" aria-hidden="true"><div data-title="说明资源"></div><div data-title="物品资源"></div></div>
       </div>
-      <div class="word-stage-three-resource-dock" aria-hidden="true"></div>
       <div class="word-stage-three-dim" aria-hidden="true"></div>
       <div class="word-stage-three-tools" aria-label="第三阶段工具">
         <button class="word-stage-three-tool word-stage-three-back" type="button" data-book-action="home" aria-label="返回首页"><img src="${WORD_STAGE_THREE_ASSETS.back}" alt=""></button>
@@ -4750,11 +5140,41 @@ function renderBook() {
           <button class="word-stage-three-tool" type="button" data-book-action="sound" aria-label="音乐按钮"><img src="${WORD_STAGE_THREE_ASSETS.sound}" alt=""></button>
         </div>
       </div>
-      ${stageInstructionHtml("three")}
-      <img class="word-stage-three-scroll" src="${WORD_STAGE_THREE_ASSETS.scroll}" alt="语法宝典：说明词放在的前面，物品放在的后面">
-      <button class="word-stage-three-next" type="button" data-book-action="next" aria-label="去整理书包"><img src="${WORD_STAGE_THREE_ASSETS.next}" alt=""></button>
+      ${wordStageThreeGuidedQuestionHtml()}
     </div>
   `;
+  view.querySelectorAll("[data-guide-choice]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const index = state.wordStageThreeGuideIndex;
+      const task = WORD_STAGE_THREE_GUIDED_TASKS[index];
+      if (!task) return;
+      const option = task.options[Number(button.dataset.guideChoice)];
+      const current = state.wordStageThreeGuideSelections[index] || [];
+      if (task.correctOrder) {
+        const next = current.includes(option) ? current.filter((value) => value !== option) : [...current, option];
+        state.wordStageThreeGuideSelections[index] = next;
+        if (next.length < task.correctOrder.length) {
+          setFeedback("两张卡片都放好后，再看看它们的位置。");
+          renderBook();
+          return;
+        }
+        if (next.join("|") !== task.correctOrder.join("|")) {
+          state.wordStageThreeGuideSelections[index] = [];
+          setFeedback("先放“谁／怎么样”，再放“物品”。");
+          renderBook();
+          return;
+        }
+      } else if (option !== task.correct) {
+        setFeedback(index === 0 ? "想想“干净”“漂亮”是在说明什么。" : "两个水杯都在桌上，想想要用什么信息区分它们。");
+        return;
+      } else {
+        state.wordStageThreeGuideSelections[index] = [option];
+      }
+      state.wordStageThreeGuideIndex += 1;
+      renderBook();
+      setFeedback(task.feedback);
+    });
+  });
   view.querySelectorAll("[data-book-action]").forEach((button) => {
     button.addEventListener("click", () => {
       const action = button.dataset.bookAction;
@@ -4764,13 +5184,14 @@ function renderBook() {
         state.sound = !state.sound;
         soundToggle.setAttribute("aria-pressed", String(state.sound));
         soundToggle.querySelector("span").textContent = state.sound ? "♪" : "×";
-        if (!state.sound && "speechSynthesis" in window) window.speechSynthesis.cancel();
+        if (!state.sound) cancelActiveSpeech();
         if (state.sound) stageThreeNarrationKey = null;
         renderBook();
       }
     });
   });
-  setFeedback("看看“的”前后，拼出完整的短语。");
+  setFeedback(state.wordStageThreeGuideIndex >= WORD_STAGE_THREE_GUIDED_TASKS.length ? "三条规则都补充好了，可以进入下一阶段。" : "读一读题目，选择合适的答案。");
+  bindBookGuideDrag();
   playStageThreeNarration("word");
 }
 
@@ -5063,9 +5484,7 @@ function phraseStage4AnswerHtml(task) {
 function renderPhraseTransferStage4Scene() {
   const index = state.phraseTransferIndex;
   if (state.phraseTransferredIds.length >= phraseTransferTasks.length || state.phraseTransferIndex >= phraseTransferTasks.length) {
-    const finalFruitIds = Object.keys(phraseStage4FruitStates);
-    view.innerHTML = `<div class="phrase-stage4-reference phrase-stage4-composed is-complete"><img class="phrase-stage4-background" src="${PHRASE_STAGE_FOUR_ASSETS.background}" alt="野餐场景">${finalFruitIds.map((id) => phraseStage4FruitHtml(id, "final")).join("")}${phraseStage4ToolsHtml()}${stageInstructionHtml("four")}${state.phraseTransferBookOpen ? stageFourGrammarOverlayHtml(PHRASE_STAGE_THREE_ASSETS.scroll, "动宾短语语法宝典", "phrase") : ""}</div>`;
-    bindPhraseTransferReferenceEvents();
+    renderLevelCelebration("phrase");
     return;
   }
   const task = phraseTransferTasks[index];
@@ -5717,7 +6136,6 @@ function renderSentenceFind() {
     setFeedback(`${task.sentence} 照护资源收好啦！`);
     playSound("success");
     renderSentenceFind();
-    window.setTimeout(() => speakPhrase(task.sentence), 60);
     window.setTimeout(() => {
     state.sentenceFindResources.push(id);
     state.sentenceFindKeeperAnimal = task.animal;
@@ -5758,14 +6176,16 @@ function sentenceReferenceAnimalHitHtml(id) {
 }
 
 function sentenceReferenceToolsHtml(bookUnlocked = false, bookSrc = WORD_STAGE_ONE_ASSETS.book) {
+  if (!bookUnlocked) bookSrc = WORD_STAGE_ONE_ASSETS.book;
   return `<div class="sentence-reference-tools"><button type="button" data-sentence-tool="home" aria-label="返回首页"><img src="${WORD_STAGE_ONE_ASSETS.back}" alt=""></button><div><button type="button" data-sentence-tool="book" ${bookUnlocked ? "" : "disabled"} aria-label="${bookUnlocked ? "语法宝典" : "语法宝典未开启"}"><img src="${bookSrc}" alt=""></button><button type="button" data-sentence-tool="sound" aria-label="音乐按钮"><img src="${WORD_STAGE_ONE_ASSETS.sound}" alt=""></button></div></div>`;
 }
 
 function sentenceStageInstructionHtml(stage) {
   const isFirstStage = stage === "one";
   const src = isFirstStage ? SENTENCE_STAGE_ONE_ASSETS.instruction : SENTENCE_STAGE_TWO_ASSETS.instruction;
-  const label = STAGE_ENTRY_NARRATIONS[isFirstStage ? "sentence:sentence-find" : "sentence:sentence-care"];
-  return `<div class="sentence-stage-instruction" aria-label="${label}"><img src="${src}" alt="${label}"></div>`;
+  const label = isFirstStage ? "听语音找动物，再选状态" : STAGE_ENTRY_NARRATIONS["sentence:sentence-care"];
+  const corrected = isFirstStage ? `<span class="stage-one-instruction-corrected" aria-hidden="true">${label}</span>` : "";
+  return `<div class="sentence-stage-instruction" aria-label="${label}"><img src="${src}" alt="${label}">${corrected}</div>`;
 }
 
 function sentenceReferenceChoicePanelStyle(animalId) {
@@ -5871,7 +6291,7 @@ function renderSentenceFindReference() {
     return `<img class="sentence-reference-animal-state" src="${asset}" alt="${sentenceAnimals[id].label}" style="left:${left}%;top:${top}%;width:${width}%;height:${height}%">`;
   }).join("");
   const distractors = Object.entries(sentenceReferenceDistractorSpots).map(([id, spot]) => `<img class="sentence-reference-distractor sentence-reference-distractor-${id}" src="${SENTENCE_STAGE_ONE_ASSETS.distractors[id]}" alt="${id === "peacock" ? "孔雀" : "大象"}" style="left:${spot.left}%;top:${spot.top}%;width:${spot.width}%;height:${spot.height}%">`).join("");
-  const currentCard = `<div class="sentence-reference-task-card"><img src="${SENTENCE_STAGE_ONE_ASSETS.taskCards[task.animal]}" alt="${sentenceAnimals[task.animal].label}"><img class="sentence-care-task-label" src="${SENTENCE_CARE_TASK_LABEL_ASSET}" alt="任务"></div>`;
+  const currentCard = `<div class="sentence-reference-task-card">${stageOneAudioButtonHtml(task.sentence, "sentence-stage-one-audio", task.id)}</div>`;
   const choices = state.sentenceFindSelectedAnimal ? sentenceReferenceChoicePanelHtml(task) : "";
   const resources = state.sentenceFindResources.map((id) => `<div class="sentence-reference-earned-item"><img class="sentence-reference-earned" src="${SENTENCE_STAGE_ONE_ASSETS.results[id]}" alt="${sentenceCareResources[id].label}"><span>${sentenceCareResources[id].label}</span></div>`).join("");
   const resourceFrame = resources
@@ -5879,6 +6299,7 @@ function renderSentenceFindReference() {
     : "";
   view.innerHTML = `<div class="sentence-reference-stage"><img class="sentence-reference-background" src="${SENTENCE_STAGE_ONE_ASSETS.background}" alt="动物园地图">${sentenceStageInstructionHtml("one")}${sentenceReferenceToolsHtml(false, SENTENCE_STAGE_ONE_ASSETS.book)}${sentenceReferenceKidHtml()}${sentenceReferenceKeeperHtml()}<div class="sentence-reference-state-layer">${distractors}${sceneAnimals}</div>${resourceFrame}${currentCard}${choices}${sentenceDemoTasks.map((item) => sentenceReferenceAnimalHitHtml(item.animal)).join("")}</div>`;
   bindSentenceReferenceEvents();
+  bindStageOneAudio();
   sentenceBindTools(renderSentenceFindReference, "sentence-find");
   startSentenceFindHintTimer();
 }
@@ -5917,7 +6338,6 @@ function bindSentenceReferenceEvents() {
     state.sentenceFindSelectedAnimal = null;
     state.sentenceFindKeeperAnimal = null;
     playSound("success");
-    speakPhrase(task.sentence);
     if (task.id === "penguin") {
       const completedIndex = state.sentenceFindIndex;
       renderSentenceFindReference();
@@ -5925,12 +6345,14 @@ function bindSentenceReferenceEvents() {
         if (state.stage !== "sentence-find" || state.sentenceFindIndex !== completedIndex || !state.sentenceFindResolved) return;
         state.sentenceFindResolved = false;
         state.sentenceFindIndex += 1;
+        queueStageOneAutoPlayback("sentence", sentenceDemoTasks[state.sentenceFindIndex]);
         renderSentenceFindReference();
       }, 2600);
       return;
     }
     state.sentenceFindResolved = false;
     state.sentenceFindIndex += 1;
+    queueStageOneAutoPlayback("sentence", sentenceDemoTasks[state.sentenceFindIndex]);
     renderSentenceFindReference();
   }));
 }
@@ -6025,51 +6447,15 @@ function clearSentenceCareErrorTargetsSoon() {
 }
 
 function sentenceCareReflectionPrompt(task) {
-  return sentenceCareReflectionPrompts[task.id] || sentenceCareReflectionPrompts.lion;
+  return SECOND_STAGE_REFLECTIONS.sentence[task.id];
 }
 
 function sentenceCareReflectionHtml(task) {
-  const reflection = sentenceCareReflectionPrompt(task);
-  const isBandageReflection = task.id === "rabbit";
-  const prompt = isBandageReflection
-    ? reflection.prompt.replace(
-        "包扎",
-        `<span class="phrase-reflection-prompt-icon"><img src="${SENTENCE_STAGE_TWO_ASSETS.resultResources.bandage}" alt="包扎"></span>`
-      )
-    : reflection.prompt;
-  return `
-    <div class="restore-lesson-overlay phrase-restore-reflection-overlay" role="dialog" aria-modal="true" aria-label="句子反思题">
-      <section class="phrase-restore-reflection-card">
-        ${isBandageReflection ? "" : `<div class="phrase-restore-reflection-visual"><img src="${SENTENCE_STAGE_TWO_ASSETS.resultResources[task.care]}" alt="${sentenceCareResources[task.care].label}"></div>`}
-        <p class="phrase-restore-reflection-prompt">${prompt}</p>
-        <div class="phrase-restore-reflection-options">
-          ${reflection.options.map((option, index) => `
-            <button class="phrase-restore-reflection-option ${state.sentenceCareReflectionSelection === option.id ? "is-selected" : ""} ${state.sentenceCareReflectionError === option.id ? "is-wrong" : ""}" type="button" data-sentence-care-reflection-choice="${option.id}">
-              <span class="phrase-restore-reflection-letter">${String.fromCharCode(65 + index)}.</span>
-              <span>${option.label}</span>
-            </button>
-          `).join("")}
-        </div>
-      </section>
-    </div>
-  `;
+  return secondStageReflectionHtml("sentence", task, state.sentenceCareReflectionSelection, state.sentenceCareReflectionError);
 }
 
 function sentenceCareLessonHtml(task) {
-  const sentence = task.sentence.replace(/[。！？]$/, "");
-  const lessonPhrase = sentence.replace("被法法", '<span class="sentence-lesson-bei">被</span><span class="sentence-lesson-agent">法法</span>');
-  return `<div class="restore-lesson-overlay sentence-care-lesson-overlay" role="dialog" aria-modal="true" aria-label="被字句语法讲解">
-    <section class="restore-lesson-card sentence-care-lesson-card">
-      ${secondStageLessonCountdownHtml()}
-      <div class="lesson-bridge-row" aria-label="动物被法法施加动作并产生结果">
-        <div class="lesson-card-piece"><img class="sentence-care-lesson-image" src="${SENTENCE_STAGE_TWO_ASSETS.animals[task.animal].initial}" alt="${sentenceAnimals[task.animal].label}"></div>
-        <div class="sentence-care-lesson-agent"><span class="sentence-lesson-bei">被</span><span class="sentence-lesson-agent">法法</span></div>
-        <div class="lesson-result-piece"><img class="sentence-care-lesson-image" src="${SENTENCE_STAGE_TWO_ASSETS.resultResources[task.care]}" alt="${sentenceCareResources[task.care].label}"></div>
-        <div class="lesson-equals" aria-hidden="true">=</div>
-        <strong class="sentence-care-lesson-phrase">${lessonPhrase}</strong>
-      </div>
-    </section>
-  </div>`;
+  return secondStageResultHtml("sentence", task);
 }
 
 function advanceSentenceCareAfterLesson() {
@@ -6159,7 +6545,7 @@ function sentenceCareAssetAnswerHtml(task, careSpots) {
   const agentVisual = agentHint || state.sentenceCareReady
     ? `<span class="sentence-care-answer-agent-hint"><span class="sentence-care-answer-agent-bei">被</span><span class="sentence-care-answer-agent-name">法法</span></span>`
     : sentenceCareCountdownHtml();
-  return `<section class="sentence-care-asset-answer ${state.sentenceCareReady ? "is-ready" : ""}" style="${sentenceCareAssetAnswerStyle(task, careSpots)}" aria-label="被字句答题区"><div class="sentence-care-asset-answer-slots"><div class="sentence-care-asset-answer-slot ${animalHint ? "is-hint" : ""} ${state.sentenceErrorTargets.includes("animal") ? "is-wrong" : ""}" data-sentence-care-drop-kind="animal" aria-label="动物资源答题框">${animalVisual}</div><div class="sentence-care-asset-answer-middle">${agentVisual}</div><div class="sentence-care-asset-answer-slot ${careHint ? "is-hint" : ""} ${state.sentenceErrorTargets.includes("care") ? "is-wrong" : ""}" data-sentence-care-drop-kind="care" aria-label="动作结果资源答题框">${careVisual}</div></div></section>`;
+  return `<section class="sentence-care-asset-answer ${state.sentenceCareReady ? "is-ready" : ""}" style="${sentenceCareAssetAnswerStyle(task, careSpots)}" aria-label="被字句答题区"><div class="sentence-care-asset-answer-slots"><div class="sentence-care-asset-answer-slot ${animalHint ? "is-hint" : ""} ${state.sentenceErrorTargets.includes("animal") ? "is-wrong" : ""}" data-sentence-care-drop-kind="animal" aria-label="动物资源答题框">${animalVisual}</div><div class="sentence-care-asset-answer-middle">${agentVisual}</div><div class="sentence-care-asset-answer-slot ${care || careHint ? "has-resource-art" : ""} ${careHint ? "is-hint" : ""} ${state.sentenceErrorTargets.includes("care") ? "is-wrong" : ""}" data-sentence-care-drop-kind="care" aria-label="动作结果资源答题框">${careVisual}</div></div></section>`;
 }
 
 function sentenceCareAssetResourceButtonHtml(kind, id, selected) {
@@ -6239,21 +6625,22 @@ function renderSentenceCare() {
   });
   view.querySelectorAll("[data-sentence-care-reflection-choice]").forEach((button) => button.addEventListener("click", () => {
     const currentTask = sentenceCareTasks[state.sentenceCareIndex];
-    if (!currentTask || state.sentenceCareReflection !== currentTask.id) return;
+    if (!currentTask || state.sentenceCareReflection !== currentTask.id || state.sentenceCareReflectionError) return;
     const reflection = sentenceCareReflectionPrompt(currentTask);
-    const choice = button.dataset.sentenceCareReflectionChoice;
+    const choice = reflection.options[Number(button.dataset.sentenceCareReflectionChoice)];
+    if (!choice) return;
     state.sentenceCareReflectionSelection = choice;
     if (choice !== reflection.correct) {
       state.sentenceCareReflectionError = choice;
       playSound("wrong");
       renderSentenceCare();
-      window.setTimeout(() => {
+      playSecondStageFeedback(reflection.wrong, () => {
         if (state.sentenceCareReflection === currentTask.id && state.sentenceCareReflectionError === choice) {
           state.sentenceCareReflectionError = null;
           state.sentenceCareReflectionSelection = null;
           renderSentenceCare();
         }
-      }, REFLECTION_FEEDBACK_DURATION_MS);
+      });
       return;
     }
     state.sentenceCareReflection = null;
@@ -6262,7 +6649,9 @@ function renderSentenceCare() {
     setFeedback("现在看语法讲解。 ");
     playSound("success");
     renderSentenceCare();
-    scheduleSentenceCareLesson(currentTask);
+    playSecondStageFeedback(reflection.right, () => {
+      if (state.sentenceCareLesson === currentTask.id) advanceSentenceCareAfterLesson();
+    });
   }));
   sentenceBindTools(renderSentenceCare, "sentence-care");
   startSentenceCareHintCountdown();
@@ -6353,10 +6742,44 @@ function sentenceBookNextArtHtml() {
   return `<button class="sentence-book-next-art" type="button" data-sentence-book-action="next" aria-label="${state.sentenceBookReturnStage ? "返回游戏" : "进入第四阶段"}"><img src="${SENTENCE_STAGE_THREE_ASSETS.next}" alt=""></button>`;
 }
 
+function sentenceStageThreeGuidedQuestionHtml() {
+  return bookGuideHtml("sentence", state.sentenceStageThreeGuideIndex, state.sentenceStageThreeGuideSelections);
+}
+
 function renderSentenceBook() {
   state.sentenceBookVisited = true;
   const returnAction = state.sentenceBookReturnStage ? "return" : "home";
-  view.innerHTML = `<div class="sentence-book-asset-stage" role="dialog" aria-label="被字句语法宝典"><img class="sentence-book-asset-background" src="${SENTENCE_STAGE_TWO_ASSETS.background}" alt="竹林动物地图"><div class="sentence-book-asset-dim" aria-hidden="true"></div>${sentenceReferenceToolsHtml(true)}${stageInstructionHtml("three")}<div class="sentence-book-scroll-art"><img src="${SENTENCE_STAGE_THREE_ASSETS.scroll}" alt="被字句语法宝典"></div>${sentenceBookNextArtHtml()}<button class="sentence-book-asset-close" type="button" data-sentence-book-action="${returnAction}" aria-label="${returnAction === "return" ? "返回游戏" : "返回首页"}"></button></div>`;
+  view.innerHTML = `<div class="sentence-book-asset-stage" role="dialog" aria-label="被字句语法宝典"><img class="sentence-book-asset-background" src="${SENTENCE_STAGE_ONE_ASSETS.background}" alt="动物园地图"><div class="word-guide-background-resources other-guide-background-resources" aria-hidden="true"><div data-title="动物资源"></div><div data-title="动作结果资源"></div></div><div class="sentence-book-asset-dim" aria-hidden="true"></div>${sentenceReferenceToolsHtml(true)}${sentenceStageThreeGuidedQuestionHtml()}<button class="sentence-book-asset-close" type="button" data-sentence-book-action="${returnAction}" aria-label="${returnAction === "return" ? "返回游戏" : "返回首页"}"></button></div>`;
+  view.querySelectorAll("[data-sentence-guide-choice]").forEach((button) => button.addEventListener("click", () => {
+    const index = state.sentenceStageThreeGuideIndex;
+    const task = SENTENCE_STAGE_THREE_GUIDED_TASKS[index];
+      if (!task) return;
+    const option = task.options[Number(button.dataset.sentenceGuideChoice)];
+    const current = state.sentenceStageThreeGuideSelections[index] || [];
+    if (task.correctOrder) {
+      const next = current.includes(option) ? current.filter((value) => value !== option) : [...current, option];
+      state.sentenceStageThreeGuideSelections[index] = next;
+      if (next.length < task.correctOrder.length) {
+        setFeedback("三张卡片都放好后，再看看它们的位置。");
+        renderSentenceBook();
+        return;
+      }
+      if (next.join("|") !== task.correctOrder.join("|")) {
+        state.sentenceStageThreeGuideSelections[index] = [];
+        setFeedback("先放“承受者”，再放“做动作的一方”，最后放“动作及结果”。");
+        renderSentenceBook();
+        return;
+      }
+    } else if (option !== task.correct) {
+      setFeedback(index === 0 ? "想想谁接受了包扎和冲洗。" : "问题问的是小兔子的伤口处理情况。");
+      return;
+    } else {
+      state.sentenceStageThreeGuideSelections[index] = [option];
+    }
+    state.sentenceStageThreeGuideIndex += 1;
+    renderSentenceBook();
+    setFeedback(task.feedback);
+  }));
   view.querySelectorAll("[data-sentence-book-action]").forEach((button) => button.addEventListener("click", () => {
     const action = button.dataset.sentenceBookAction;
     if (action === "home") setStage("home");
@@ -6364,7 +6787,8 @@ function renderSentenceBook() {
     if (action === "next") state.sentenceBookReturnStage ? returnFromSentenceBook() : startSentenceTransfer();
   }));
   sentenceBindTools(renderSentenceBook, state.sentenceBookReturnStage || "sentence-book");
-  setFeedback("承受者在前面，重点看它受到了什么影响。 ");
+  setFeedback(state.sentenceStageThreeGuideIndex >= SENTENCE_STAGE_THREE_GUIDED_TASKS.length ? "三条规则都补充好了，可以进入下一阶段。" : "读一读题目，选择合适的答案。");
+  bindBookGuideDrag();
   playStageThreeNarration("sentence");
 }
 
@@ -6618,7 +7042,7 @@ function renderSentenceStage4Complete() {
 
 function renderSentenceTransfer() {
   if (state.sentenceTransferredIds.length === sentenceTransferTasks.length || state.sentenceTransferIndex >= sentenceTransferTasks.length) {
-    renderSentenceStage4Complete();
+    renderLevelCelebration("sentence");
     return;
   }
   const task = sentenceTransferTasks[state.sentenceTransferIndex];
@@ -6819,12 +7243,14 @@ function sentenceTransferError(message, targets, topic = "规则") {
 }
 
 function finishSentenceTransferTask(task) {
+  if (state.sentenceTransferReady) return;
   state.sentenceTransferReady = true;
   clearSentenceError();
   setFeedback(`${task.sentence} 做对啦！`);
   playSound("success");
   renderSentenceTransfer();
   window.setTimeout(() => {
+    if (state.stage !== "sentence-transfer" || sentenceTransferTasks[state.sentenceTransferIndex] !== task || !state.sentenceTransferReady) return;
     state.sentenceTransferredIds.push(task.id);
     state.sentenceTransferIndex += 1;
     state.sentenceTransferSelections = { value: null, object: null, result: null };
@@ -6837,17 +7263,7 @@ function finishSentenceTransferTask(task) {
 
 function renderWordTransfer() {
   if (state.transferredIds.length === transferTasks.length) {
-    view.innerHTML = `
-      <div class="word-stage-four-canvas is-complete">
-        <img class="word-stage-four-background" src="${WORD_STAGE_FOUR_ASSETS.background}" alt="书包整理完成的教室">
-        ${wordStageFourPlacedItemsHtml(null)}
-        ${wordStageFourToolsHtml()}
-        ${state.transferBookOpen ? transferBookOverlayHtml() : ""}
-      </div>
-    `;
-    bindWordStageFourTools();
-    setFeedback("书包整理完成。");
-    updateProgress();
+    renderLevelCelebration("word");
     return;
   }
 
@@ -6900,7 +7316,7 @@ function bindWordStageFourTools() {
         state.sound = !state.sound;
         soundToggle.setAttribute("aria-pressed", String(state.sound));
         soundToggle.querySelector("span").textContent = state.sound ? "♪" : "×";
-        if (!state.sound && "speechSynthesis" in window) window.speechSynthesis.cancel();
+        if (!state.sound) cancelActiveSpeech();
         renderTransfer();
       }
     });
@@ -6946,9 +7362,11 @@ function wordStageFourAnswerHtml(task) {
 function wordStageFourQuestionHtml(task) {
   const position = task.questionPosition || { left: 796, top: 169, width: 185, height: 254 };
   const label = task.phrase || task.prompt;
+  const hasAnswerVisual = task.id !== "clean-towel-choice" && Boolean(WORD_STAGE_FOUR_ASSETS.objects[task.id]);
   return `
     <section class="word-stage-four-question-art word-stage-four-question-art-${task.id}${task.id === "blue-notebook" ? " has-de-bridge" : ""}" style="left:${position.left}px;top:${position.top}px;width:${position.width}px;height:${position.height}px" aria-label="${label}图像">
       <img src="${WORD_STAGE_FOUR_ASSETS.questionArt[task.id]}" alt="${label}">
+      ${hasAnswerVisual ? `<span class="word-stage-four-answer-visual" aria-hidden="true"><img src="${WORD_STAGE_FOUR_ASSETS.objects[task.id]}" alt=""></span>` : ""}
       ${task.id === "blue-notebook" ? '<span class="word-stage-four-de-bridge" aria-hidden="true">的</span>' : ""}
       ${task.type === "drag-resources" ? wordStageFourCombinationHtml(task) : ""}
     </section>
@@ -6979,9 +7397,8 @@ function wordStageFourOptionHtml(task) {
   const count = task.options?.length || 4;
   return `
     <div class="word-stage-four-option-art" style="left:${position.left}px;top:${position.top}px;width:${position.width}px;height:${position.height}px" aria-label="选项">
-      <img src="${WORD_STAGE_FOUR_ASSETS.optionArt[task.id]}" alt="">
       <div class="word-stage-four-option-hotspots">
-        ${Array.from({ length: count }, (_, index) => `<button class="word-stage-four-option-hotspot ${state.transferErrorTargets.includes(`option-${index}`) ? "is-wrong" : ""}" type="button" data-transfer-option="${index}" aria-label="选项${String.fromCharCode(65 + index)}"></button>`).join("")}
+        ${Array.from({ length: count }, (_, index) => `<button class="word-stage-four-option-hotspot ${state.transferErrorTargets.includes(`option-${index}`) ? "is-wrong" : ""}" type="button" data-transfer-option="${index}" aria-label="选项${String.fromCharCode(65 + index)}：${task.options[index]}"><span>${task.options[index]}</span></button>`).join("")}
       </div>
     </div>
   `;
@@ -7412,7 +7829,7 @@ function bindTransferEvents() {
         state.sound = !state.sound;
         soundToggle.setAttribute("aria-pressed", String(state.sound));
         soundToggle.querySelector("span").textContent = state.sound ? "♪" : "×";
-        if (!state.sound && "speechSynthesis" in window) window.speechSynthesis.cancel();
+        if (!state.sound) cancelActiveSpeech();
         renderTransfer();
       }
     });
@@ -7531,7 +7948,7 @@ function completeTransferTask() {
   if (!task || !state.transferReady) return;
   transferCompleteTimer = null;
   if (!state.transferredIds.includes(task.id)) state.transferredIds.push(task.id);
-  playSound(state.transferIndex + 1 === transferTasks.length ? "reward" : "drop");
+  if (state.transferIndex + 1 < transferTasks.length) playSound("drop");
   setFeedback(`${task.phrase}，整理好了。`);
   state.transferIndex += 1;
   state.transferSelections = { modifier: null, object: null };
@@ -7647,11 +8064,37 @@ function safeDragData(event) {
   }
 }
 
-function speakPhrase(text) {
-  if (!state.sound || !("speechSynthesis" in window) || typeof SpeechSynthesisUtterance === "undefined") return;
+function currentSpeechRoute() {
+  return `${state.category}:${state.stage}`;
+}
+
+function cancelActiveSpeech() {
+  speechRequestId += 1;
+  if (!("speechSynthesis" in window)) return;
+  if (pendingVoiceListener) {
+    window.speechSynthesis.removeEventListener("voiceschanged", pendingVoiceListener);
+    pendingVoiceListener = null;
+  }
+  window.speechSynthesis.cancel();
+}
+
+function syncSpeechRoute() {
+  const route = currentSpeechRoute();
+  if (activeSpeechRoute === route) return;
+  activeSpeechRoute = route;
+  stopSecondStageFeedback();
+  cancelActiveSpeech();
+}
+
+function speakPhrase(text, expectedRoute = currentSpeechRoute(), onEnd = null, onStart = null) {
+  if (!state.sound || !("speechSynthesis" in window) || typeof SpeechSynthesisUtterance === "undefined") return false;
+  if (currentSpeechRoute() !== expectedRoute) return false;
+  cancelActiveSpeech();
+  const requestId = speechRequestId;
   const synthesis = window.speechSynthesis;
   const speakWithMandarinVoice = () => {
-    if (!state.sound) return;
+    if (pendingVoiceListener === speakWithMandarinVoice) pendingVoiceListener = null;
+    if (!state.sound || requestId !== speechRequestId || currentSpeechRoute() !== expectedRoute) return false;
     const voices = synthesis.getVoices();
     const voice = voices
       .filter((item) => !/(yue|cantonese|hong kong|taiwan|zh-hk|zh-tw|zh-hant|粤语|繁体)/i.test(`${item.lang} ${item.name}`))
@@ -7666,23 +8109,60 @@ function speakPhrase(text) {
         return score(b) - score(a);
       })
       .find((item) => /^(zh-cn|cmn-hans-cn|zh-hans)/i.test(item.lang));
-    if (!voice) return;
+    if (!voice) return false;
 
-    synthesis.cancel();
     synthesis.resume();
     const utterance = new SpeechSynthesisUtterance(text.replace(/[。！？!?]+$/u, ""));
     utterance.voice = voice;
     utterance.lang = voice.lang;
     utterance.rate = 0.8;
     utterance.pitch = 1;
+    utterance.onend = () => {
+      if (requestId === speechRequestId && currentSpeechRoute() === expectedRoute) onEnd?.();
+    };
+    utterance.onerror = () => {
+      if (requestId === speechRequestId && currentSpeechRoute() === expectedRoute) onEnd?.();
+    };
     synthesis.speak(utterance);
+    onStart?.();
+    return "started";
   };
 
   if (synthesis.getVoices().length) {
-    speakWithMandarinVoice();
-    return;
+    return speakWithMandarinVoice();
   }
-  synthesis.addEventListener("voiceschanged", speakWithMandarinVoice, { once: true });
+  pendingVoiceListener = speakWithMandarinVoice;
+  synthesis.addEventListener("voiceschanged", pendingVoiceListener, { once: true });
+  return "pending";
+}
+
+function stopSecondStageFeedback() {
+  secondStageFeedbackToken += 1;
+  if (secondStageFeedbackTimer) window.clearTimeout(secondStageFeedbackTimer);
+  secondStageFeedbackTimer = null;
+  secondStageFeedbackFinish = null;
+}
+
+function playSecondStageFeedback(text, onComplete) {
+  stopSecondStageFeedback();
+  const token = secondStageFeedbackToken;
+  const route = currentSpeechRoute();
+  let finished = false;
+  const finish = () => {
+    if (finished || token !== secondStageFeedbackToken || currentSpeechRoute() !== route) return;
+    finished = true;
+    if (secondStageFeedbackTimer) window.clearTimeout(secondStageFeedbackTimer);
+    secondStageFeedbackTimer = null;
+    secondStageFeedbackFinish = null;
+    onComplete();
+  };
+  secondStageFeedbackFinish = finish;
+  const speechStatus = speakPhrase(text, route, finish, () => {
+    if (secondStageFeedbackTimer) window.clearTimeout(secondStageFeedbackTimer);
+    secondStageFeedbackTimer = window.setTimeout(finish, 20_000);
+  });
+  if (speechStatus === "pending") secondStageFeedbackTimer = window.setTimeout(finish, 5_000);
+  if (!speechStatus) secondStageFeedbackTimer = window.setTimeout(finish, 1_200);
 }
 
 function currentStageEntryNarrationKey() {
@@ -7695,7 +8175,7 @@ function stopStageEntryNarration({ cancelSpeech = false } = {}) {
     window.clearTimeout(stageEntryNarrationTimer);
     stageEntryNarrationTimer = null;
   }
-  if (cancelSpeech && "speechSynthesis" in window) window.speechSynthesis.cancel();
+  if (cancelSpeech) cancelActiveSpeech();
 }
 
 function playStageEntryNarration() {
@@ -7735,21 +8215,58 @@ function currentStageThreeCategory() {
 
 function syncStageThreeNarrationState() {
   const currentCategory = currentStageThreeCategory();
-  if (!stageThreeNarrationKey || stageThreeNarrationKey === currentCategory) return;
-  if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+  if (!stageThreeNarrationKey || stageThreeNarrationKey.startsWith(`${currentCategory}:`)) return;
+  cancelActiveSpeech();
+  window.clearTimeout(stageThreeNarrationTimer);
+  window.clearTimeout(stageThreeCompletionTimer);
   stageThreeNarrationKey = null;
 }
 
+function stageThreeGuideProgress(category) {
+  if (category === "word") return state.wordStageThreeGuideIndex;
+  if (category === "phrase") return state.phraseStageThreeGuideIndex;
+  if (category === "sentence") return state.sentenceStageThreeGuideIndex;
+  return 0;
+}
+
 function playStageThreeNarration(category) {
-  if (!state.sound || currentStageThreeCategory() !== category || stageThreeNarrationKey === category) return;
-  const narration = STAGE_THREE_NARRATIONS[category];
-  if (!narration) return;
-  stageThreeNarrationKey = category;
-  window.setTimeout(() => {
-    if (state.sound && currentStageThreeCategory() === category && stageThreeNarrationKey === category) {
-      speakPhrase(narration);
+  const guideIndex = stageThreeGuideProgress(category) - 1;
+  if (currentStageThreeCategory() !== category || state[`${category}StageThreeSummaryReady`]) return;
+  const finalReveal = guideIndex === STAGE_THREE_NARRATIONS[category].length - 1;
+  const key = `${category}:${guideIndex}`;
+  const finish = () => {
+    if (stageThreeNarrationKey !== key || currentStageThreeCategory() !== category
+      || stageThreeGuideProgress(category) - 1 !== guideIndex
+      || state[`${category}StageThreeSummaryReady`]) return;
+    window.clearTimeout(stageThreeCompletionTimer);
+    if (!finalReveal) return;
+    state[`${category}StageThreeSummaryReady`] = true;
+    render();
+  };
+  // With sound off, leave time to see the uncovered usage before the summary.
+  if (!state.sound) {
+    window.clearTimeout(stageThreeNarrationTimer);
+    window.clearTimeout(stageThreeCompletionTimer);
+    stageThreeNarrationKey = key;
+    if (finalReveal) stageThreeCompletionTimer = window.setTimeout(finish, 1200);
+    return;
+  }
+  if (stageThreeNarrationKey === key) return;
+  window.clearTimeout(stageThreeNarrationTimer);
+  window.clearTimeout(stageThreeCompletionTimer);
+  const grammar = STAGE_THREE_GRAMMAR_NAMES[category];
+  const narration = guideIndex < 0
+    ? `这一关学习的是${grammar}。一起通过三道引导题，了解它的意义、规则和使用。`
+    : `${grammar}的${STAGE_THREE_NARRATIONS[category][guideIndex]}`;
+  stageThreeNarrationKey = key;
+  stageThreeNarrationTimer = window.setTimeout(() => {
+    if (state.sound && stageThreeGuideProgress(category) - 1 === guideIndex && currentStageThreeCategory() === category && stageThreeNarrationKey === key) {
+      const status = speakPhrase(narration, currentSpeechRoute(), finish, () => {
+        window.clearTimeout(stageThreeCompletionTimer);
+      });
+      if (finalReveal && !status) stageThreeCompletionTimer = window.setTimeout(finish, 1200);
     }
-  }, 180);
+  }, finalReveal ? 650 : 180);
 }
 
 function restart() {
@@ -7764,6 +8281,7 @@ function restart() {
   stopStageEntryNarration({ cancelSpeech: true });
   stageEntryNarrationKey = null;
   state.stage = "find";
+  state.stageOneAudioAutoPlayKey = null;
   state.findIndex = 0;
   state.foundIds = [];
   state.resources = [];
@@ -7788,6 +8306,9 @@ function restart() {
   state.restoredIds = [];
   state.restoreCompleteView = false;
   state.bookVisited = false;
+  state.wordStageThreeGuideIndex = 0;
+  state.wordStageThreeSummaryReady = false;
+  state.wordStageThreeGuideSelections = [];
   state.transferIndex = 0;
   state.transferSelections = { modifier: null, object: null };
   state.transferSingleSelection = null;
@@ -7802,6 +8323,7 @@ function restart() {
   state.transferredIds = [];
   stopRestoreBridgeCountdown();
   setFeedback("看任务卡，在同一张房间画布里找对应物品。");
+  queueStageOneAutoPlayback("word", findTasks[0], { includeInstruction: true });
   render();
 }
 
@@ -8191,9 +8713,12 @@ soundToggle.addEventListener("click", () => {
   state.sound = !state.sound;
   soundToggle.setAttribute("aria-pressed", String(state.sound));
   soundToggle.querySelector("span").textContent = state.sound ? "♪" : "×";
-  if (!state.sound && "speechSynthesis" in window) window.speechSynthesis.cancel();
-  if (state.sound && currentStageThreeCategory()) {
-    stageThreeNarrationKey = null;
+  if (!state.sound) {
+    cancelActiveSpeech();
+    secondStageFeedbackFinish?.();
+  }
+  if (currentStageThreeCategory()) {
+    if (state.sound) stageThreeNarrationKey = null;
     playStageThreeNarration(currentStageThreeCategory());
   }
   refreshStageEntryNarrationForSound();

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>语文知识乐园 - “的”的用法</title>
+    <link rel="stylesheet" href="./styles.css?v=stage1-entry-baseline-8" />
+    <link rel="stylesheet" href="./resource-ui.css?v=stage1-audio-aligned-5" />
+    <link rel="stylesheet" href="./top-ui.css?v=stage1-bulb-group-8" />
+    <link rel="stylesheet" href="./question-ui.css?v=1" />
+    <link rel="stylesheet" href="./book-guide.css?v=stage3-reveal-narration-10" />
+  </head>
+  <body>
+    <main id="game" class="game-stage" aria-label="语文知识乐园">
+      <header class="topbar">
+        <div class="brand-block">
+          <div class="brand-mark" aria-hidden="true">的</div>
+          <div>
+            <h1>周末整理房间</h1>
+            <p id="storyLine">房间有点乱，法法需要你一起找物品。</p>
+          </div>
+        </div>
+        <nav class="stage-tabs" aria-label="关卡阶段">
+          <button class="tab is-active" type="button" data-stage-tab="find">找物</button>
+          <button class="tab" type="button" data-stage-tab="restore">还原</button>
+          <button class="tab" type="button" data-stage-tab="book">宝典</button>
+          <button class="tab" type="button" data-stage-tab="transfer">迁移</button>
+        </nav>
+        <div class="top-actions">
+          <button id="soundToggle" class="icon-button" type="button" aria-pressed="true" title="语音反馈">
+            <span aria-hidden="true">♪</span>
+          </button>
+          <button id="restartBtn" class="icon-button" type="button" title="重新开始">
+            <span aria-hidden="true">↺</span>
+          </button>
+        </div>
+      </header>
+
+      <section id="view" class="view" aria-live="polite"></section>
+
+      <footer class="statusbar">
+        <div class="progress-shell" aria-label="总进度">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+        <p id="feedbackText" class="feedback-text">看任务卡，在同一张房间画布里找对应物品。</p>
+      </footer>
+    </main>
+
+    <script src="./game.js?v=stage3-reveal-narration-10"></script>
+    <script>
+const previewParams = new URLSearchParams(location.search);
+state.sound = false;
+state.category = previewParams.get('category') || 'phrase';
+state.stage = state.category === 'word' ? 'book' : state.category + '-book';
+state[state.category + 'StageThreeGuideIndex'] = Number(previewParams.get('question') || 0);
+state[state.category + 'StageThreeGuideSelections'] = [];
+render();
+    </script>
+    <script src="./resource-ui.js?v=stage1-audio-aligned-5"></script>
+    <script src="./top-ui.js?v=8"></script>
+  </body>
+</html>

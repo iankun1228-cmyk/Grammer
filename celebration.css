@@ -1,0 +1,31 @@
+/* Scale with the game's established 1194 × 834 canvas. */
+#game.celebration-layout { grid-template-rows:1fr; }
+#game.celebration-layout > .topbar,
+#game.celebration-layout > .statusbar { display:none; }
+#game.celebration-layout .view { background:#fff8e6; overflow:hidden; }
+.celebration-screen { position:absolute; inset:0; width:1194px; height:834px; overflow:hidden; isolation:isolate; }
+.celebration-background { position:absolute; inset:0; width:100%; height:100%; object-fit:fill; }
+.celebration-hero { position:absolute; left:214px; top:126px; width:750px; height:500px; object-fit:contain; animation:celebration-arrive 650ms cubic-bezier(.2,.8,.3,1.2) both; }
+.celebration-tool { position:absolute; top:57px; width:86px; height:91px; border:0; padding:0; background:transparent; cursor:pointer; z-index:3; }
+.celebration-tool img { width:100%; height:100%; object-fit:contain; }
+.celebration-back { left:36px; }
+.celebration-replay { right:46px; }
+.celebration-book { position:absolute; left:524px; top:577px; width:280px; height:76px; display:flex; align-items:center; justify-content:center; gap:24px; border:4px solid white; border-radius:42px; background:#ffd33f; color:white; font-family:inherit; font-size:29px; line-height:1.2; font-weight:900; cursor:pointer; animation:celebration-arrive 450ms 180ms ease-out both; }
+.celebration-book-icon { position:relative; width:30px; height:37px; border:3px solid white; border-radius:3px; flex:0 0 30px; box-shadow:3px 3px 0 -1px #ffd33f, 3px 3px 0 1px white; }
+.celebration-book-icon::after { content:''; position:absolute; left:-3px; right:0; bottom:3px; border-top:3px solid white; }
+.celebration-tool:hover,.celebration-book:hover { filter:brightness(1.04); }
+.celebration-tool:focus-visible,.celebration-book:focus-visible { outline:3px solid #845000; outline-offset:5px; border-radius:28px; }
+.celebration-confetti { position:absolute; inset:0; pointer-events:none; z-index:2; overflow:hidden; }
+.celebration-confetti i { position:absolute; top:-25px; left:var(--x); width:9px; height:18px; border-radius:3px; background:var(--color); opacity:0; animation:celebration-confetti var(--duration) var(--delay) ease-in forwards; }
+.celebration-sparkles { position:absolute; inset:0; pointer-events:none; }
+.celebration-sparkles i { position:absolute; width:21px; height:21px; background:#fff6ac; clip-path:polygon(50% 0,60% 38%,100% 50%,60% 62%,50% 100%,40% 62%,0 50%,40% 38%); animation:celebration-sparkle 1.5s 650ms ease-in-out 3 both; }
+.celebration-sparkles i:nth-child(1) { left:485px; top:285px; }
+.celebration-sparkles i:nth-child(2) { left:661px; top:225px; animation-delay:950ms; }
+.celebration-sparkles i:nth-child(3) { left:821px; top:300px; animation-delay:1250ms; }
+@keyframes celebration-arrive { from { opacity:0; transform:translateY(16px) scale(.94); } to { opacity:1; transform:none; } }
+@keyframes celebration-confetti { 0% { opacity:0; transform:translateY(0) rotate(0); } 8% { opacity:.85; } 85% { opacity:.7; } 100% { opacity:0; transform:translate(var(--drift),860px) rotate(var(--spin)); } }
+@keyframes celebration-sparkle { 0%,100% { opacity:0; transform:scale(.5); } 50% { opacity:.95; transform:scale(1); } }
+@media (prefers-reduced-motion:reduce) {
+  .celebration-hero,.celebration-book { animation:none; }
+  .celebration-confetti,.celebration-sparkles { display:none; }
+}
